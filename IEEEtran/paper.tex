@@ -216,7 +216,7 @@
 
 % *** SUBFIGURE PACKAGES ***
 %\ifCLASSOPTIONcompsoc
- \usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
+ \usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf,position=top]{subfig}
 %\else
  %\usepackage[caption=false,font=footnotesize]{subfig}
 %\fi
@@ -403,7 +403,9 @@
 % labels, the optional argument to \subfloat must be present. If a
 % subcaption is not desired, just leave its contents blank,
 % e.g., \subfloat[].
-
+%\usepackage{caption}
+%\usepackage{subcaption}
+\usepackage{tabularx}
 
 % An example of a floating table. Note that, for IEEE style tables, the
 % \caption command should come BEFORE the table and, given that table
@@ -982,41 +984,37 @@ Two iterative schemes of the Master-Slave splitting are defined \cite{Sun2011}. 
 In the MAI-scheme, we define a maximum number of iterations per separate system, ie: $I_{max,D}$ and $I_{max,T}$. We inject the output of one system into the other as soon this maximum number of iterations has been reached. The convergence of the integrated network is still based on the convergence condition of the MSS-algorithm. 
 \paragraph{Speeding up the CAI-scheme}
 At every MSS iteration, we solve the separated domains on its own. To solve this separated system, we need to initialize the voltages in order to have an initial guess to start Newton-Raphson. In the current suggested schemes, we initialize all the buses, except the boundary bus $B$, to $V=1.0$ pu.\todo{Clarify the coming phrase} We can reduce the number of required iterations for the separate systems if we initialize the voltages to its last obtained solution in the previous MSS-iteration, ie $V^{\nu+1}_0=V^{\nu}_{I,D}$. This will probably be beneficial for the CAI-scheme, where a separated domain requires a couple of iterations before it is converged.  
-\newpage 
-\section{Numerical assessment of integration methods}
-We are testing the unified and splitting methods on several test-cases. We implemented the methods in the Matpower\footnote{MATPOWER is a package of free, open-source Matlab-language M-files for solving steady-state power system simulation and optimization problems \cite{Zimmerman2011}}  library. We created several integrated test cases from existing transmission and distribution test networks. We used the IEEE 9-bus, 118-bus, and 3120-bus data as transmission network test cases. We used the IEEE 13-bus and 37-bus data as distribution test cases. We modified the 13-bus Distribution network to a 10-bus network by deleting the buses connected to a regulator. The 37-bus network is originally a balanced distribution network. We changed it to an unbalanced network by shifting 20\% of the loads of phase b equally to phase a and c, like the original authors \cite{Taranto2008}. \newline
-To connect the load buses of the transmission network to the slack bus of the distribution network, we replaced the load-bus by a transformer with the same line impedance as the first distribution cable. We also changed the D-slack bus, the right hand side of the new transformer, to a load bus having the load of the former connecting load bus \cite{Taranto2008}. \newline
-From these separated test cases, we created the following combinations: T9-D13, T9-D37, T118-D13, D118-D37, and T3120-D37. All distribution cases are connected by their reference bus. The 9-bus transmission network is connected via bus 7, the 118-bus network via bus 89, and the 3120-bus network via bus 3. We created two new test-cases to see how the integration methods respond when we connect multiple distribution networks to it:  T9-2D13 and T9-3D13, respectively 2 and 3 D13-networks connected to the T9-network. 
-% \subsection{Numerical results}
-% \begin{table*}[htbp]
-% \renewcommand{\arraystretch}{1.3}
-% \centering
-% \label{tab:resultsPIC3P}
-% \begin{adjustbox}{width=1\textwidth}
-% \small
-% \begin{tabular}{@{}l c cc c cc c cc c cc c cc  @{}}\toprule
-%                                       && \multicolumn{2}{c}{\textit{T9-D10}} && \multicolumn{2}{c}{\textit{T30-D37}}&& \multicolumn{2}{c}{\textit{T2383-D13}}  && \multicolumn{2}{c}{\textit{T9-2D10}}  && \multicolumn{2}{c}{\textit{T9-3D10}} \\ \toprule 
-% \multicolumn{1}{l}{}                  && \textit{its}      & \textit{CPU}     && \textit{its}       & \textit{CPU}   && \textit{its}       & \textit{CPU}  && \textit{its}      & \textit{CPU}     && \textit{its}       & \textit{CPU}     \\
-% \cmidrule{3-4}  \cmidrule{6-7} \cmidrule{9-10} \cmidrule{12-13} \cmidrule{15-16} 
-% \multicolumn{1}{l}{}                  && \textit{\#}       & \textit{sec}     && \textit{\#}        & \textit{sec}    && \textit{\#}        & \textit{sec}   && \textit{\#}       & \textit{sec}     && \textit{\#}        & \textit{sec}        \\ 
-% \toprule
-% \multicolumn{1}{l}{\textit{F3P}}                    && 4       & 0.559  && 5    & 0.610 &&  5    &  54.1   && 4  & 0.580  && 4  & 0.584  \\ 
-% \multicolumn{1}{l}{{\textit{IC}}}                   && 4       & 0.449  && 4    & 0.500 &&  4    &  32.9  && 4  & 0.488  && 4  & 0.473   \\ 
-% \multicolumn{1}{l}{{\textit{MS-homo-CAI}}}          && 4       & 0.241  && 3    & 0.258 &&  DNC  &  DNC   && 4  & 0.263  && 4  & 0.272  \\ 
-% \multicolumn{1}{l}{{\textit{MS-hybrid-CAI}}}        && 4       & 0.297  && 3    & 0.327 &&  4    &  115   && 4  & 0.324  && 4  & 0.320  \\ 
-% \multicolumn{1}{l}{{\textit{MS-homo-MAI(2)}}}       && DNC     & DNC  && DNC    & DNC     &&  DNC  &  DNC   && DNC  & DNC  && DNC & DNC    \\ 
-% \multicolumn{1}{l}{{\textit{MS-hybrid-MAI(2)}}}     && 6       & 0.294  && 4    & 0.324     &&  4    &  58     && 6  & 0.334  && 7  & 0.346  \\ 
 
-% \toprule 
-% \end{tabular}
-% \end{adjustbox}
-% \caption{OLD: Comparison on number of iterations (its) and CPU-time of the different test-cases}
-% \end{table*}
+
+
+
+
+
+\newpage 
+\section{Numerical assessment}
+All previous mentioned methods are implemented into the Matpower\footnote{MATPOWER is a package of free, open-source Matlab-language M-files for solving steady-state power system simulation and optimization problems \cite{Zimmerman2011}} library. Matpower consists of several transmission network test cases. The resources page of IEEE Power \& Energy Society  contains several distribution network test cases which are all explained in \cite{Schneider2018}. These test cases contain the necessary input to solve power flow problems. We created integrated test test cases from the existing transmission and distribution test cases. We used the IEEE 9-bus, 118-bus, and 3120-bus data as transmission network test cases and the IEEE 13-bus and 37-bus data as distribution test cases. The distribution test cases represent the unbalanced characteristics of the network. We modified the 13-bus distribution network to a 10-bus network by deleting the buses connected to the regulator. We changed the loading of the 37-bus network by shifting 20\% of the loads of phase b equally to phase a and c, just like the original authors \cite{Taranto2008}.
+We connected two networks to each other creating the following integrated test cases: 
+\begin{itemize}
+    \item Test case 1: T9-D13
+    \item Test case 2: T9-D37
+    \item Test case 3: T118-D37
+    \item Test case 4: T3120-D37
+    \item Test case 5: T9-2D13 (2 13-bus distribution networks) 
+    \item Test case 6: T9-3D13 (3 13-bus distribution networks) 
+\end{itemize}
+\paragraph{Connection bus}
+We selected a random load bus in the transmission network to become the connection bus in the integrated network. We choose bus $7$ in the 9-bus network, we choose bus $118$ in the 118-bus network, and we choose bus $3003$ in the 3120-bus network. This could have been any load bus of the original network. The original reference bus of the distribution network becomes the connection bus in the integrated network. \\
+The unified methods puts a transformer between the connection buses. This transformer has the same line admittance as the first distribution cable. The lhs of the transformer is the transmission connection bus, now having zero load. The rhs is the distribution connection bus. This is the former reference bus and must be changed to a load bus having the load as the original transmission connection bus \cite{Taranto2008}. The splitting methods do not put a transformer between the networks. They only change the original transmission load bus to a bus having zero load.   \newline \newline
+Test case 5 and 6 have multiple distribution networks connected. These networks are connected to the last 2 and 3 load buses of the transmission networks, where each of the original load bus is changed to a zero load bus. 
+\subsection{Results}
+
 
 \begin{table}[!ht]
 \renewcommand{\arraystretch}{1.3}
 \centering
 \label{tab:resultsPIC3P}\hspace{2cm}
+\caption{Comparison on number of iterations for homogeneous networks (for the MSS-method ($I_{MSS}$) and the necessary iterations per system ($I_T$ and $I_D$)), and CPU-time of the four different MSS-methods, applied on five test-cases. The numbers marked with an asterisk converged to wrong results. In this case, the MAI method required more than 2 subiterations to converge correctly. The slowest CPU times are printed in bold. The top one are methods applied on hybrid networks. The bottom one is applied on homogeneous networks. }
+\subfloat[Hybrid networks]{
 \begin{adjustbox}{width=1\textwidth} %, angle=90}
 \small
 \begin{tabular}{@{}l c cc c  cccc c cccc c  @{}}\toprule
@@ -1034,8 +1032,31 @@ From these separated test cases, we created the following combinations: T9-D13, 
 % \multicolumn{1}{l}{{\textit{T9-3D13}}}    && - & - && - & -    && -       & - & -  & \textbf{-} && -   & - & - &  - && -       & -  & - & - && -       & -  & - & - \\
 \toprule 
 \end{tabular}
-\end{adjustbox}
-\caption{Comparison on number of iterations for hybrid networks (for the MSS-method ($I_{MSS}$) and the necessary iterations per system ($I_T$ and $I_D$)), and CPU-time of the four different MSS-methods, applied on five test-cases. The numbers marked with an asterisk converged to wrong results. In this case, the MAI method required more than 2 subiterations to converge correctly. The slowest CPU times are printed in bold.}
+\end{adjustbox}}
+
+\hspace{-2.5cm}
+\subfloat[Homogeneous networks]{
+%\caption{.}
+\label{tab:resultsPIC3P}\hspace{2cm}
+\begin{adjustbox}{width=1\textwidth} %, angle=90}
+\small
+\begin{tabular}{@{}l c cc c  cccc c cccc c  @{}}\toprule
+                               && \multicolumn{2}{c}{\textit{F3P}} &&     \multicolumn{4}{c}{\textit{MS-homo-CAI}} && \multicolumn{4}{c}{\textit{MS-homo-MAI}} \\ \toprule 
+\multicolumn{1}{l}{}        && \textit{its}      & \textit{CPU} && $I_{MSS}$      & $I_T$   &  $I_D$      & \textit{CPU}     &&$I_{MSS}$      & $I_T$   &  $I_D$      & \textit{CPU}      \\
+\cmidrule{3-4}  \cmidrule{6-9}  \cmidrule{11-14}   
+\multicolumn{1}{l}{}      && \textit{\#}       & \textit{sec} && \textit{\#}      & \textit{\#}    & \textit{\#}       & \textit{sec}     && \textit{\#}        & \textit{\#}     &  \textit{\#}       & \textit{sec}  \\
+\midrule
+\multicolumn{1}{l}{\textit{T9-D13 (7)}}      && 4 &\textbf{ 0.610}  && 4 & 4 & 4 &  0.237 && 6       & 2 & 2  & {0.257}\\
+\multicolumn{1}{l}{\textit{T9-D37 (7)}}      && 4 & \textbf{0.587}    && 3 & 4 & 4 &  0.262 && 6       & 2 & 2  & {0.299}\\
+\multicolumn{1}{l}{{\textit{T118-D13 (89)}}}   && 5 & \textbf{0.763}     && 3       & 7 & 5  & 0.324 && 4  & 2 &2 &  0.297  \\
+\multicolumn{1}{l}{{\textit{T118-D37 (89)}}}   && 5 & \textbf{0.920}    && 3       & 7 & 5  & 0.360 && 4 & 2 & 2 &  0.325 \\
+\multicolumn{1}{l}{{\textit{T3120-D37 (3003)}}}   && 5 & \textbf{2438}   &&  3 & 6  & 4  & 1213  && 6 & 2 & 2 &  841    \\
+% \multicolumn{1}{l}{\textit{T9-2D13}}       && - & - && - & -    && -       & - & -  & \textbf{-} && -   & - & - &  - && -       & -  & - & - && -       & -  & - & - \\
+% \multicolumn{1}{l}{{\textit{T9-3D13}}}    && - & - && - & -    && -       & - & -  & \textbf{-} && -   & - & - &  - && -       & -  & - & - && -       & -  & - & - \\
+\toprule 
+\end{tabular}
+\end{adjustbox}}
+
 \end{table}
 
 
