@@ -1075,7 +1075,17 @@ From these separated test cases, we created the following combinations: T9-D13, 
 \input{L-N2I2}
 \input{L-N1I2}
 \newpage 
-
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{Images/MAI_N1.eps}
+\caption{Hybrid networks}
+\end{figure}
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{Images/Z_MAI_N1.eps}
+\caption{Hybrid networks}
+\end{figure}
+\newpage
 The results show that most of the methods are good options to solve integrated networks. They converge in a reasonable amount of time and number of iterations and this number is not increasing when the size of the network increases. Only the MS-homogeneous-MAI method is not working properly. The method does not reach convergence. If we take a closer look at the voltage profiles, Figure ... , we see a difference in how this is distributed according to the separated networks. We start with the unified methods. We see a drop at bus $7$, this is the bus connected to the distribution network via a transformer. In the Master-Slave methods we see a different profile at bus $7$: the voltage here is equal to the voltage at the first bus of the distribution network (bus 10 in the plot). But bus $2$ is significantly lower. The results differ, because the MSS-algorithm does not put a transformer in between the two connecting nodes: it uses the input and output directly. So bus $7$ IS bus $1$ of the distribution network. We then must see the voltage drop somewhere else in the transmission network, which we do: mainly at bus 2. This bus is directly connected to bus 7, so now gets less power. \\
 Distribution networks are radial, so power flows into the first node and is then distributed to the rest of the network. So all these buses are only influenced by the previous bus. That is why the voltage profiles of distribution networks remains the same, only the voltage magnitude of the entire network is higher, because they receive more power from the connected transmission network, then they would get from the generator when the network is modeled separately. 
 \begin{figure*}[h!]
