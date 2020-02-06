@@ -1,0 +1,42 @@
+\begin{table}[!ht]
+\renewcommand{\arraystretch}{1.3}
+\centering
+\caption{Comparison on number of iterations (in case of the MSS-method ($I_{MSS}$) and the necessary iterations per subdomain ($I_T$ and $I_D$)), and CPU-time of the integration methods, applied on five test-cases. The top one are methods applied on homogeneous networks. The bottom one is applied on hybrid networks. }\label{tab:speed}
+\begin{adjustbox}{width=1\textwidth} %, angle=90}
+\small
+\begin{tabular}{@{}l c cc c  cccc c cccc c  @{}}\toprule
+                               && \multicolumn{2}{c}{\textit{F3P}} &&     \multicolumn{4}{c}{\textit{MS-homo-CAI}} && \multicolumn{4}{c}{\textit{MS-homo-MAI}} \\ \midrule 
+\multicolumn{1}{l}{}        && \textit{its}      & \textit{CPU} && $I_{MSS}$      & $I_T$   &  $I_D$      & \textit{CPU}     &&$I_{MSS}$      & $I_T$   &  $I_D$      & \textit{CPU}      \\
+\cmidrule{3-4}  \cmidrule{6-9}  \cmidrule{11-14}   
+\multicolumn{1}{c}{test case}      && \textit{\#}       & \textit{sec} && \textit{\#}      & \textit{\#}    & \textit{\#}       & \textit{sec}     && \textit{\#}        & \textit{\#}     &  \textit{\#}       & \textit{sec}  \\
+\midrule
+\multicolumn{1}{c}{\textit{T9-D13 (7)}}      && 4 &\textbf{ 0.610}  && 4 & 4 & 4 &  0.237 && 6       & 2 & 2  & {0.257}\\
+\multicolumn{1}{c}{\textit{T9-D37 (7)}}      && 4 & \textbf{0.587}    && 3 & 4 & 4 &  0.262 && 6       & 2 & 2  & {0.299}\\
+\multicolumn{1}{c}{{\textit{T118-D13 (89)}}}   && 5 & \textbf{0.763}     && 3       & 7 & 5  & 0.324 && 4  & 2 &2 &  0.297  \\
+\multicolumn{1}{c}{{\textit{T118-D37 (89)}}}   && 5 & \textbf{0.920}    && 3       & 7 & 5  & 0.360 && 4 & 2 & 2 &  0.325 \\
+\multicolumn{1}{c}{{\textit{T3120-D37 (3003)}}}   && 5 & \textbf{2438}   &&  3 & 6  & 4  & 1213  && 6 & 2 & 2 &  841    \\
+% \multicolumn{1}{l}{\textit{T9-2D13}}       && - & - && - & -    && -       & - & -  & \textbf{-} && -   & - & - &  - && -       & -  & - & - && -       & -  & - & - \\
+% \multicolumn{1}{l}{{\textit{T9-3D13}}}    && - & - && - & -    && -       & - & -  & \textbf{-} && -   & - & - &  - && -       & -  & - & - && -       & -  & - & - \\
+\toprule 
+\end{tabular}
+\end{adjustbox}
+%homogeneous
+\begin{adjustbox}{width=1\textwidth} %, angle=90}
+\small
+\begin{tabular}{@{}l c cc c  cccc c cccc c  @{}}\toprule
+                               && \multicolumn{2}{c}{\textit{IC}} &&     \multicolumn{4}{c}{\textit{MS-hybrid-CAI}} && \multicolumn{4}{c}{\textit{MS-hybrid-MAI}} \\ \midrule 
+\multicolumn{1}{l}{}        && \textit{its}      & \textit{CPU} && $I_{MSS}$      & $I_T$   &  $I_D$      & \textit{CPU}     &&$I_{MSS}$      & $I_T$   &  $I_D$      & \textit{CPU}      \\
+\cmidrule{3-4}  \cmidrule{6-9}  \cmidrule{11-14}   
+\multicolumn{1}{c}{test case}      && \textit{\#}       & \textit{sec} && \textit{\#}      & \textit{\#}    & \textit{\#}       & \textit{sec}     && \textit{\#}        & \textit{\#}     &  \textit{\#}       & \textit{sec}  \\
+\midrule
+\multicolumn{1}{c}{\textit{T9-D13 (7)}}         && 4 & {0.455 } && 4       & 4  & 4 & 0.308 && 6      & 2  & 2 & 0.323  \\
+\multicolumn{1}{c}{\textit{T9-D37 (7)}}         && 4 & 0.464    && 3      & 4  & 4 & 0.325 && 6      & 2  & 2 & 0.352  \\
+\multicolumn{1}{c}{{\textit{T118-D13 (89)}}}    && 4 & 0.522    && 3      & 7 & 5 & 0.348 && 4 & 2  & 2 & {0.312*} \\
+\multicolumn{1}{c}{{\textit{T118-D37 (89)}}}    && 4 & 0.518    && 3      & 7 & 5 & 0.356 && 4 & 2  & 2 & {0.358}\\
+\multicolumn{1}{c}{{\textit{T3120-D37 (3003)}}} && 5 & 143      && 3      & 6  & 4  & 383 && 6*  & 2*  & 2* & {235*}  \\
+% \multicolumn{1}{l}{\textit{T9-2D13}}       && - & - && - & -    && -       & - & -  & \textbf{-} && -   & - & - &  - && -       & -  & - & - && -       & -  & - & - \\
+% \multicolumn{1}{l}{{\textit{T9-3D13}}}    && - & - && - & -    && -       & - & -  & \textbf{-} && -   & - & - &  - && -       & -  & - & - && -       & -  & - & - \\
+\toprule 
+\end{tabular}
+\end{adjustbox}
+\end{table}
