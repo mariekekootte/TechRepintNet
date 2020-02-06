@@ -1,0 +1,23 @@
+\begin{table}
+\renewcommand{\arraystretch}{1.3}
+\centering
+\label{tab:resultsPIC3P}\hspace{2cm}\caption{Test case T118-D37 with different MAI-iterative schemes applied on a homogeneous network}
+\begin{adjustbox}{width=1\textwidth} %, angle=90}
+\small
+\begin{tabular}{cccccccccccc}
+\toprule
+{} && \multicolumn{7}{c}{Infinity norm} && &  \\
+\cmidrule{3-9}
+{} && \multicolumn{3}{c}{$|V|$} && \multicolumn{3}{c}{$\delta$} && \\
+\cmidrule{3-5}\cmidrule{7-9}
+{$I_T$,$I_D$} &&        a &        b &       c &&        a &       b &        c && sec & $I_{MSS}$\\
+\midrule
+2 &&  2.017e-01 &  2.017e-01 &  2.017e-01 &&  1.993e+01 &  1.993e+01 &  1.993e+01 && 0.325 & 4 \\
+3 &&  3.436e-02 &  3.436e-02 &  3.436e-02 &&  7.153e+00 &  7.150e+00 &  7.156e+00 && 0.368 & 5 \\
+4 &&  9.069e-03 &  9.005e-03 &  9.100e-03 &&  7.426e-01 &  7.393e-01 &  7.448e-01 && 0.323 & 3\\
+5 &&  8.984e-03 &  8.911e-03 &  9.005e-03 &&  4.507e-01 &  4.474e-01 &  4.530e-01 && 0.351 & 3\\
+6 &&  8.984e-03 &  8.911e-03 &  9.005e-03 &&  4.501e-01 &  4.468e-01 &  4.524e-01 && 0.347 & 3\\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}
