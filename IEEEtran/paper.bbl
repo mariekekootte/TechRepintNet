@@ -1,0 +1,74 @@
+\begin{thebibliography}{10}
+
+\bibitem{Schavemaker2008chap6}
+P.~Schavemaker and L.~van~der Sluis, ``{Energy Management Systems},'' in {\em
+  Electrical Power System Essentials}, ch.~6, Sussex, United Kingdom: John
+  Wiley {\&} Sons, Inc., 2008.
+
+\bibitem{Garcia2000}
+P.~A.~N. Garcia, J.~L.~R. Pereira, S.~Carneiro, and V.~M. {Da Costa},
+  ``{Three-phase power flow calculations using the current injection method},''
+  {\em IEEE Transactions on Power Systems}, vol.~15, no.~2, pp.~508--514, 2000.
+
+\bibitem{Abdel-akher2005}
+M.~Abdel-akher, K.~M. Nor, A.~Halim, and A.~Rashid, ``{Improved Three-Phase
+  Power-Flow Methods Using Sequence Components},'' vol.~20, no.~3,
+  pp.~1389--1397, 2005.
+
+\bibitem{Teng2002a}
+J.~H. Teng and C.~Y. Chang, ``{A novel and fast three-phase load flow for
+  unbalanced radial distribution systems},'' {\em IEEE Transactions on Power
+  Systems}, vol.~17, no.~4, pp.~1238--1244, 2002.
+
+\bibitem{Chen1991a}
+T.-H. Chen, M.-S. Chen, K.-J. Hwang, P.~Kotas, and E.~Chebli, ``{Distribution
+  system power flow analysis-a rigid approach},'' {\em IEEE Transactions on
+  Power Delivery}, vol.~6, no.~3, pp.~1146--1152, 1991.
+
+\bibitem{Teng2008}
+J.~Teng, ``{Modelling distributed generations in three-phase distribution load
+  flow},'' {\em Generation, Transmission {\&} Distribution, IET}, vol.~2,
+  no.~3, pp.~330--340, 2008.
+
+\bibitem{Farag2011}
+H.~E. Farag, E.~El-Saadany, R.~{El Shatshat}, and A.~Zidan, ``{A generalized
+  power flow analysis for distribution systems with high penetration of
+  distributed generation},'' {\em Electric Power Systems Research}, vol.~81,
+  pp.~1499--1506, jul 2011.
+
+\bibitem{Moghaddas2009}
+S.~M. Moghaddas-Tafreshi and E.~Mashhour, ``{Distributed generation modeling
+  for power flow studies and a three-phase unbalanced power flow solution for
+  radial distribution systems considering distributed generation},'' {\em
+  Electric Power Systems Research}, vol.~79, pp.~680--686, apr 2009.
+
+\bibitem{Eminoglu2008}
+H.~M.~H. {Eminoglu U.}, ``{The MeridiDistribution Systems Forward/Backward
+  Sweepbased Power Flow Algorithms: A Review and Comparison Study},'' {\em
+  Electric Power Components and Systems}, dec 2008.
+
+\bibitem{Taranto2008}
+G.~N. Taranto and J.~M. Marinho, ``{A Hybrid Three-Phase Single-Phase Power
+  Flow Formulation},'' {\em IEEE Transactions on Power Systems}, vol.~23,
+  no.~3, pp.~1063--1070, 2008.
+
+\bibitem{Sun2005}
+H.~B. Sun and B.~M. Zhang, ``{Global state estimation for whole transmission
+  and distribution networks},'' vol.~74, pp.~187--195, 2005.
+
+\bibitem{Sun2008}
+H.~Sun and B.~Zhang, ``{Distributed Power Flow Calculation for Whole Networks
+  Including Transmission and Distribution},'' pp.~1--6, 2008.
+
+\bibitem{Sun2011}
+H.~Sun, D.~Nikovski, T.~Ohno, T.~Takano, and Y.~Kojima, ``{A fast and robust
+  load flow method for distribution systems with distributed generations},''
+  {\em Energy Procedia}, vol.~12, pp.~236--244, 2011.
+
+\bibitem{Zimmerman2011}
+R.~D. Zimmerman, C.~E. Murillo-S{\'{a}}nchez, and R.~J. Thomas, ``{MATPOWER:
+  Steady-state operations, planning, and analysis tools for power systems
+  research and education},'' {\em IEEE Transactions on Power Systems}, vol.~26,
+  no.~1, pp.~12--19, 2011.
+
+\end{thebibliography}

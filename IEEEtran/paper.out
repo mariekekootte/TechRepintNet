@@ -1,0 +1,16 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Characterization of the power flow problem}{}% 2
+\BOOKMARK [1][-]{section.3}{Electricity networks}{}% 3
+\BOOKMARK [2][-]{subsection.3.1}{Transmission networks: single-phase representation}{section.3}% 4
+\BOOKMARK [2][-]{subsection.3.2}{Distribution networks: three-phase representation}{section.3}% 5
+\BOOKMARK [1][-]{section.4}{Integrating transmission and distribution networks}{}% 6
+\BOOKMARK [2][-]{subsection.4.1}{Unified methods}{section.4}% 7
+\BOOKMARK [3][-]{subsubsection.4.1.1}{The full three-phase method}{subsection.4.1}% 8
+\BOOKMARK [3][-]{subsubsection.4.1.2}{The interconnected method}{subsection.4.1}% 9
+\BOOKMARK [2][-]{subsection.4.2}{Master-Slave splitting methods}{section.4}% 10
+\BOOKMARK [3][-]{subsubsection.4.2.1}{The MSS-homogeneous method}{subsection.4.2}% 11
+\BOOKMARK [3][-]{subsubsection.4.2.2}{The MSS-hybrid method}{subsection.4.2}% 12
+\BOOKMARK [3][-]{subsubsection.4.2.3}{The Master-Slave iterative schemes}{subsection.4.2}% 13
+\BOOKMARK [1][-]{section.5}{Numerical assessment of integration methods}{}% 14
+\BOOKMARK [2][-]{subsection.5.1}{Speeding-up the computations}{section.5}% 15
+\BOOKMARK [1][-]{section.6}{Discussion}{}% 16
