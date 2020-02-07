@@ -982,7 +982,7 @@ The MSS-methods do not require a transformation of the nodal admittance matrix. 
 \subsubsection{The Master-Slave iterative schemes}
 Two iterative schemes of the Master-Slave splitting are defined \cite{Sun2011}. The first is the Convergence Alternating Iterative (CAI) scheme and the other is the Multistep Alternating Iterative (MAI) scheme. In the CAI-scheme, we define an explicit convergence condition for the slave and for the master. The slave is solved with NR-TCIM, for which we define a tolerance value $\epsilon_D$\todo{Give $\epsilon$}. Once this system has converged, we inject its boundary output into the master. We solve the master using NR-power, for which we also define a (not necessarily) different tolerance value $\epsilon_T$. Once the master has converged, we inject its boundary output into the slave. The integrated network is converged once we have met the convergence condition of the MSS-algorithm. \\
 In the MAI-scheme, we define a maximum number of iterations per separate system, ie: $I_{max,D}$ and $I_{max,T}$. We inject the output of one system into the other as soon this maximum number of iterations has been reached. The convergence of the integrated network is still based on the convergence condition of the MSS-algorithm. 
-\paragraph{Speeding up the CAI-scheme}
+\paragraph{Speeding up the CAI-scheme} \label{par:caischeme}
 At every MSS iteration, we solve the separated domains on its own. To solve this separated system, we need to initialize the voltages in order to have an initial guess to start Newton-Raphson. In the current suggested schemes, we initialize all the buses, except the boundary bus $B$, to $V=1.0$ pu.\todo{Clarify the coming phrase} We can reduce the number of required iterations for the separate systems if we initialize the voltages to its last obtained solution in the previous MSS-iteration, ie $V^{\nu+1}_0=V^{\nu}_{I,D}$. This will probably be beneficial for the CAI-scheme, where a separated domain requires a couple of iterations before it is converged.  
 
 
@@ -1024,7 +1024,7 @@ The voltage angle represents the phase-shift in relation to the reference bus. I
 \label{eq:dViDnew}
 \end{equation}
 Note that we need to apply \eqref{eq:ViDnew} and \eqref{eq:dViDnew} to all the three phases separately. \newline\newline
-We compare the voltage magnitudes and angles of the integrated network, including the scaled distribution domain, with the magnitudes angles of the separate domains. We take the infinity norm of the relative difference between the voltages: 
+We compare the voltage magnitudes and angles of the integrated network, including the scaled distribution domain, with the magnitudes angles of the separate domains. We take the infinity norm of the relative difference between the voltages: spee
 \begin{equation}
 \mbox{rel. error of } |V|_p = \left|\frac{|V|^*_p - |V|^o_p}{|V|^o_p}\right|_\infty,\quad p\in\{a,b,c\},
 \label{eq:norm|V|}
@@ -1037,55 +1037,42 @@ where the asterisk $*$ marks the outcome of separated networks, and the superscr
 We have given the relative errors of the voltage magnitude and angle of the three phases for all the test cases in table \ref{tab:relerror}. 
 
 \input{allnorms}
-\paragraph{Relative error}
-Table \ref{tab:relerror} shows that all the integration methods produce accurate results, except for the MSS-homo-MAI and MSS-hybrid-MAI methods. This is caused by the number of iterations per subdomain that has been set too strict. We increased the number of iterations per subdomain to see whether the output gets more accurate. We show these results in table \ref{tab:MAIschems}. Next to the relative error, this table shows the required MSS iterations and how long it takes to reach convergence. We only applied these tests on test case 4, as these results were least accurate. 
-
+\paragraph{The MAI-scheme}
+Table \ref{tab:relerror} shows that all the integration methods produce accurate results, except for the MSS-homo-MAI and MSS-hybrid-MAI methods. This is caused by the number of iterations per subdomain that has been set too strict. To produce more accurate results, we increased the number of iterations per subdomain simultaneously. We started with $I_{T,max}=I_{D,max}=2$ until $I_{T,max}=I_{D,max}=6$.  Table \ref{tab:MAIschemes} shows the results. Next to the relative error, this table shows the required number of MSS iterations and how long it takes to reach convergence. We only applied these tests on test case T118-D37, as these results were least accurate. When using $4$ iterations per subdomain, the results become as accurate as the MSS-CAI methods. 
 \input{L-MAIN2}
+We plotted the voltage magnitude and angles of the MAI-schemes to show how the solution is with every increase of the maximum number of subiterations approaching its 'true' results. For comparison we plotted the separated transmission and distribution network as 'true' solution. 
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\textwidth]{Images/MAI_N2.eps}
+\caption{Voltage profile (left: magnitude, right: angle) of the MAI-schemes with increasing number of subiterations, applied on homogeneous networks}\label{fig:MAIN2}
+\end{figure}
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\textwidth]{Images/Z_MAI_N2.eps}
+\caption{A magnified version of the top figure of the buses surrounding the connection bus.}\label{fig:ZMAIN2}
+\end{figure}
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\textwidth]{Images/MAI_N1.eps}
+\caption{Voltage profile (left: magnitude, right: angle) of the MAI-schemes with increasing number of subiterations, applied on hybrid networks}\label{fig:MAIN1}
+\end{figure}
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\textwidth]{Images/Z_MAI_N1.eps}
+\caption{A magnified version of the top figure of the buses surrounding the connection bus.}\label{fig:ZMAIN1}
+\end{figure}
 
-%\input{L-MAIN1}
 
 \subsubsection{Convergence and speed} 
 The previous subsection shows that all the methods produce accurate results. In order to solve realistic power flow problems, which are very large electricity networks, we need insight into the speed of the problems. In this section we compare the integration methods on CPU-time and number of iterations. We share the results in table \ref{tab:speed}. 
 \include{tablespeed}
+These results show that over all the test cases, the full three-phase method performs the least. The rest of the methods are comparable in speed for the small test-cases. The big test case, test-case 5, gives the most significant results. The hybrid network methods are a lot faster than the homogeneous methods. \newline \newline
+There is not a clear significance in the MSS-CAI- and MAI-schemes. We would recommend to choose the CAI method as this method is only a bit slower than the MAI method, but you will always get accurate results. With the MAI-scheme, you first have to find out how many subiterations are required before convergence.  
 
-% Nu de figuren 
-
-
-\newpage 
-\begin{figure}
-\centering
-\includegraphics[width=\textwidth]{Images/MAI_N1.eps}
-\caption{Hybrid networks}
-\end{figure}
-\begin{figure}
-\centering
-\includegraphics[width=\textwidth]{Images/Z_MAI_N1.eps}
-\caption{Hybrid networks}
-\end{figure}
-\begin{figure}
-\centering
-\includegraphics[width=\textwidth]{Images/MAI_N2.eps}
-\caption{Homogeneous networks}
-\end{figure}
-\begin{figure}
-\centering
-\includegraphics[width=\textwidth]{Images/Z_MAI_N2.eps}
-\caption{Homogeneous networks}
-\end{figure}
-
-\newpage
-The results show that most of the methods are good options to solve integrated networks. They converge in a reasonable amount of time and number of iterations and this number is not increasing when the size of the network increases. Only the MS-homogeneous-MAI method is not working properly. The method does not reach convergence. If we take a closer look at the voltage profiles, Figure ... , we see a difference in how this is distributed according to the separated networks. We start with the unified methods. We see a drop at bus $7$, this is the bus connected to the distribution network via a transformer. In the Master-Slave methods we see a different profile at bus $7$: the voltage here is equal to the voltage at the first bus of the distribution network (bus 10 in the plot). But bus $2$ is significantly lower. The results differ, because the MSS-algorithm does not put a transformer in between the two connecting nodes: it uses the input and output directly. So bus $7$ IS bus $1$ of the distribution network. We then must see the voltage drop somewhere else in the transmission network, which we do: mainly at bus 2. This bus is directly connected to bus 7, so now gets less power. \\
-Distribution networks are radial, so power flows into the first node and is then distributed to the rest of the network. So all these buses are only influenced by the previous bus. That is why the voltage profiles of distribution networks remains the same, only the voltage magnitude of the entire network is higher, because they receive more power from the connected transmission network, then they would get from the generator when the network is modeled separately. 
-\begin{figure*}[h!]
-    \centering
-    \includegraphics[width=\textwidth]{Images/Enumathpaper.eps}
-    \caption{Voltage magnitudes of the different integration methods and separated method. Up: The MSS-methods. Down: The unified methods. Bus 7 and 11 are the buses that are connected.}
-    \label{fig:voltmag}
-\end{figure*}
-\subsection{Speeding-up the computations}
-Real transmission and distribution networks, in the Netherlands, have millions of buses. The time to run simulations then becomes really important. In the test-simulations, it is difficult to draw any conclusions from the CPU-time. Only the T2383-D13 network gives a visible difference in CPU-time. As expected, the F3P-method is somewhat slower than the IC-method, and the MSS-methods are even slower. This is logical, because in the F3P-method, the size of the Jacobian increases of being 2n by 2n, to 6n by 6n, n the number of buses in the network. The MSS-method requires 4 iterations, thus solving each the transmission network and distribution network 4 times, instead of one integrated network 4 times. \\
-But real networks have another difference, compared to the T2383 network: real distribution networks are much larger than real transmission networks. So the size of transmission networks is not really influencing the speed of computations. Furthermore, very large networks, must be solved in parallel and the MSS-method is some kind of domain-decomposition approach: multiple distribution networks can run on parallel cores and then inject the result to the main core, where the transmission network is solved. Doing new simulations using these speed-up techniques on realistically sized networks, should give a better idea which method is most favourable to solve the integrated power flow problem. 
-\section{Discussion}
+\section{Conclusion}
+We have reviewed and assessed two types of integration methods to solve the power flow problem. We classified them as unified and splitting methods and applied them on hybrid and homogeneous networks. We checked if the methods produced accurate results and analyzed the speed and number of iterations before convergence has been reached. \newline
+From this assessment we can conclude that the methods applied on hybrid networks most favourable in sense of CPU-time. This can be easily argued as the size of the Jacobian in the transmission subdomain increases from having size 2n by 2n, to having a size of 6n by 6n. $n$ is the number of transmission buses. The differences between the splitting and unified methods applied on hybrid networks are less significant. We would recommend to choose the unified methods when this is possible. But in geographically distinct locations, or when legislation prohibits system operators to share complete network data, the splitting methods are very valuable. The speed of the CAI-schemes can be reduced when we apply the idea of paragraph \ref{par:caischeme}. \newline\newline
+The next step is to continue with realistic test cases which can be up to millions of buses per subdomain. In most countries, the transmission network is much smaller than the distribution network and a country has most of the time more than one distribution network. The differences between homogeneous and hybrid methods become less significant. Furthermore, these very large networks must be solved in parallel which require other technique. The MSS-method has an advantage here, it is a domain-decomposition approach: multiple distribution networks can run on parallel cores. Doing new simulations using these speed-up techniques on realistically sized networks, should give a better idea which method is most favourable to solve the integrated power flow problem. 
 
 %\section{References}
 \newpage
