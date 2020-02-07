@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2018.8.22)  7 FEB 2020 11:44
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2018.8.22)  7 FEB 2020 12:51
 entering extended mode
 **paper.tex
 (C:\Users\mekootte\Documents\ShareLatex\TechrepintNet\IEEEtran\paper.tex
@@ -1358,7 +1358,7 @@ f koppel2.eps>
 (epstopdf)             \includegraphics on input line 751.
 Package epstopdf Info: Output file is already uptodate.
 
-<koppel2-eps-converted-to.pdf, id=173, 1346.02875pt x 525.965pt>
+<koppel2-eps-converted-to.pdf, id=165, 1346.02875pt x 525.965pt>
 File: koppel2-eps-converted-to.pdf Graphic file (type pdf)
 
 <use koppel2-eps-converted-to.pdf>
@@ -1386,7 +1386,7 @@ r-eps-converted-to.pdf Images/substationtransformer.eps>
 (epstopdf)             \includegraphics on input line 835.
 Package epstopdf Info: Output file is already uptodate.
 
-<Images/substationtransformer-eps-converted-to.pdf, id=202, 510.90875pt x 167.6
+<Images/substationtransformer-eps-converted-to.pdf, id=194, 510.90875pt x 167.6
 2625pt>
 File: Images/substationtransformer-eps-converted-to.pdf Graphic file (type pdf)
 
@@ -1421,12 +1421,19 @@ Underfull \hbox (badness 10000) in paragraph at lines 1006--1009
  []
 
 [13]
-Underfull \hbox (badness 10000) in paragraph at lines 1025--1028
+Underfull \hbox (badness 10000) in paragraph at lines 1026--1029
 
  []
 
-(C:\Users\mekootte\Documents\ShareLatex\TechrepintNet\IEEEtran\allnorms.tex)
-(C:\Users\mekootte\Documents\ShareLatex\TechrepintNet\IEEEtran\L-MAIN2.tex)
+[14]
+(C:\Users\mekootte\Documents\ShareLatex\TechrepintNet\IEEEtran\allnorms.tex
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+) (C:\Users\mekootte\Documents\ShareLatex\TechrepintNet\IEEEtran\L-MAIN2.tex)
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
 Package epstopdf Info: Source file: <Images/MAI_N2.eps>
 (epstopdf)                    date: 2020-02-06 11:00:22
 (epstopdf)                    size: 711059 bytes
@@ -1435,15 +1442,14 @@ Package epstopdf Info: Source file: <Images/MAI_N2.eps>
 (epstopdf)                    size: 326245 bytes
 (epstopdf)             Command: <epstopdf --outfile=Images/MAI_N2-eps-converted
 -to.pdf Images/MAI_N2.eps>
-(epstopdf)             \includegraphics on input line 1046.
+(epstopdf)             \includegraphics on input line 1048.
 Package epstopdf Info: Output file is already uptodate.
-
-<Images/MAI_N2-eps-converted-to.pdf, id=316, 1387.1825pt x 699.61375pt>
+<Images/MAI_N2-eps-converted-to.pdf, id=318, 1387.1825pt x 699.61375pt>
 File: Images/MAI_N2-eps-converted-to.pdf Graphic file (type pdf)
 
 <use Images/MAI_N2-eps-converted-to.pdf>
 Package pdftex.def Info: Images/MAI_N2-eps-converted-to.pdf used on input line 
-1046.
+1048.
 (pdftex.def)             Requested size: 345.0pt x 173.9956pt.
 Package epstopdf Info: Source file: <Images/Z_MAI_N2.eps>
 (epstopdf)                    date: 2020-02-06 11:06:22
@@ -1453,16 +1459,20 @@ Package epstopdf Info: Source file: <Images/Z_MAI_N2.eps>
 (epstopdf)                    size: 92541 bytes
 (epstopdf)             Command: <epstopdf --outfile=Images/Z_MAI_N2-eps-convert
 ed-to.pdf Images/Z_MAI_N2.eps>
-(epstopdf)             \includegraphics on input line 1051.
+(epstopdf)             \includegraphics on input line 1053.
 Package epstopdf Info: Output file is already uptodate.
 
-<Images/Z_MAI_N2-eps-converted-to.pdf, id=317, 1387.1825pt x 699.61375pt>
+<Images/Z_MAI_N2-eps-converted-to.pdf, id=319, 1387.1825pt x 699.61375pt>
 File: Images/Z_MAI_N2-eps-converted-to.pdf Graphic file (type pdf)
 
 <use Images/Z_MAI_N2-eps-converted-to.pdf>
 Package pdftex.def Info: Images/Z_MAI_N2-eps-converted-to.pdf used on input lin
-e 1051.
+e 1053.
 (pdftex.def)             Requested size: 345.0pt x 173.9956pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
 Package epstopdf Info: Source file: <Images/MAI_N1.eps>
 (epstopdf)                    date: 2020-02-06 11:00:07
 (epstopdf)                    size: 711282 bytes
@@ -1471,16 +1481,19 @@ Package epstopdf Info: Source file: <Images/MAI_N1.eps>
 (epstopdf)                    size: 326236 bytes
 (epstopdf)             Command: <epstopdf --outfile=Images/MAI_N1-eps-converted
 -to.pdf Images/MAI_N1.eps>
-(epstopdf)             \includegraphics on input line 1056.
+(epstopdf)             \includegraphics on input line 1058.
 Package epstopdf Info: Output file is already uptodate.
-
-<Images/MAI_N1-eps-converted-to.pdf, id=318, 1387.1825pt x 699.61375pt>
+<Images/MAI_N1-eps-converted-to.pdf, id=322, 1387.1825pt x 699.61375pt>
 File: Images/MAI_N1-eps-converted-to.pdf Graphic file (type pdf)
 
 <use Images/MAI_N1-eps-converted-to.pdf>
 Package pdftex.def Info: Images/MAI_N1-eps-converted-to.pdf used on input line 
-1056.
+1058.
 (pdftex.def)             Requested size: 345.0pt x 173.9956pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
 Package epstopdf Info: Source file: <Images/Z_MAI_N1.eps>
 (epstopdf)                    date: 2020-02-06 11:09:29
 (epstopdf)                    size: 263718 bytes
@@ -1489,36 +1502,39 @@ Package epstopdf Info: Source file: <Images/Z_MAI_N1.eps>
 (epstopdf)                    size: 92142 bytes
 (epstopdf)             Command: <epstopdf --outfile=Images/Z_MAI_N1-eps-convert
 ed-to.pdf Images/Z_MAI_N1.eps>
-(epstopdf)             \includegraphics on input line 1061.
+(epstopdf)             \includegraphics on input line 1063.
 Package epstopdf Info: Output file is already uptodate.
-
-<Images/Z_MAI_N1-eps-converted-to.pdf, id=319, 1387.1825pt x 699.61375pt>
+<Images/Z_MAI_N1-eps-converted-to.pdf, id=323, 1387.1825pt x 699.61375pt>
 File: Images/Z_MAI_N1-eps-converted-to.pdf Graphic file (type pdf)
 
 <use Images/Z_MAI_N1-eps-converted-to.pdf>
 Package pdftex.def Info: Images/Z_MAI_N1-eps-converted-to.pdf used on input lin
-e 1061.
+e 1063.
 (pdftex.def)             Requested size: 345.0pt x 173.9956pt.
- [14] [15] [16] [17 <C:/Users/mekootte/Documents/ShareLatex/TechrepintNet/IEEEt
-ran/Images/MAI_N2-eps-converted-to.pdf> <C:/Users/mekootte/Documents/ShareLatex
-/TechrepintNet/IEEEtran/Images/Z_MAI_N2-eps-converted-to.pdf>] [18 <C:/Users/me
-kootte/Documents/ShareLatex/TechrepintNet/IEEEtran/Images/MAI_N1-eps-converted-
-to.pdf> <C:/Users/mekootte/Documents/ShareLatex/TechrepintNet/IEEEtran/Images/Z
-_MAI_N1-eps-converted-to.pdf>]
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[15 <C:/Users/mekootte/Documents/ShareLatex/TechrepintNet/IEEEtran/Images/MAI_N
+2-eps-converted-to.pdf>] [16 <C:/Users/mekootte/Documents/ShareLatex/Techrepint
+Net/IEEEtran/Images/Z_MAI_N2-eps-converted-to.pdf>] [17 <C:/Users/mekootte/Docu
+ments/ShareLatex/TechrepintNet/IEEEtran/Images/MAI_N1-eps-converted-to.pdf> <C:
+/Users/mekootte/Documents/ShareLatex/TechrepintNet/IEEEtran/Images/Z_MAI_N1-eps
+-converted-to.pdf>] [18] [19]
 (C:\Users\mekootte\Documents\ShareLatex\TechrepintNet\IEEEtran\tablespeed.tex)
-[19
+[20
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 1069--1071
+Underfull \hbox (badness 10000) in paragraph at lines 1071--1073
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1073--1076
+Underfull \hbox (badness 10000) in paragraph at lines 1075--1078
 
  []
 
-[20
+[21
 
 ] (C:\Users\mekootte\Documents\ShareLatex\TechrepintNet\IEEEtran\paper.bbl
 Underfull \hbox (badness 5696) in paragraph at lines 46--49
@@ -1526,67 +1542,58 @@ Underfull \hbox (badness 5696) in paragraph at lines 46--49
 or-
  []
 
-[21])
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1083.
- [22]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1083.
+[22])
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1085.
+ [23]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1085.
 
 (C:\Users\mekootte\Documents\ShareLatex\TechrepintNet\IEEEtran\paper.aux
 (C:\Users\mekootte\Documents\ShareLatex\TechrepintNet\IEEEtran\tablespeed.aux))
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1083.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1083.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1085.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1085.
 
+Package rerunfilecheck Info: File `paper.out' has not changed.
+(rerunfilecheck)             Checksum: 343351C76B3D3A7B88E2DBCE06D648A2;1362.
 
-Package rerunfilecheck Warning: File `paper.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
-Package rerunfilecheck Info: Checksums for `paper.out':
-(rerunfilecheck)             Before: 31756CA1A629F102C3F6EFD446D41CB4;1488
-(rerunfilecheck)             After:  343351C76B3D3A7B88E2DBCE06D648A2;1362.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1083.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1085.
  ) 
 Here is how much of TeX's memory you used:
- 33060 strings out of 493921
- 739460 string characters out of 3147273
- 832141 words of memory out of 3000000
- 35582 multiletter control sequences out of 15000+200000
+ 33057 strings out of 493921
+ 739417 string characters out of 3147273
+ 828140 words of memory out of 3000000
+ 35580 multiletter control sequences out of 15000+200000
  15693 words of font info for 58 fonts, out of 3000000 for 9000
  844 hyphenation exceptions out of 8191
  56i,20n,77p,1894b,1109s stack positions out of 5000i,500n,10000p,200000b,50000s
-pdfTeX warning (dest): name{section.7} has been referenced but does not exist
-, replaced by a fixed one
-
-pdfTeX warning (dest): name{subsection.6.1} has been referenced but does not ex
-ist, replaced by a fixed one
-
-<C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Prog
-ram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Program File
-s/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx5.pfb><C:/Program Files/MiKTeX 
-2.9/fonts/type1/public/amsfonts/cm/cmbx7.pfb><C:/Program Files/MiKTeX 2.9/fonts
-/type1/public/amsfonts/cm/cmbx9.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/pu
-blic/amsfonts/cm/cmex10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/ams
-fonts/cm/cmmi10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm
-/cmmi5.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pf
-b><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Pro
-gram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program File
-s/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi9.pfb><C:/Program Files/MiKTeX 
-2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKTeX 2.9/fonts
-/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/pu
-blic/amsfonts/cm/cmr17.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsf
-onts/cm/cmr5.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cm
-r6.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:
-/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program F
-iles/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:/Program Files/MiKTe
-X 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fo
-nts/type1/public/amsfonts/cm/cmsy5.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1
-/public/amsfonts/cm/cmsy7.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/a
-msfonts/cm/cmsy9.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/c
-m/cmti10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti9.
-pfb>
-Output written on paper.pdf (22 pages, 1800804 bytes).
+<C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Pr
+ogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Program Fi
+les/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx5.pfb><C:/Program Files/MiKTe
+X 2.9/fonts/type1/public/amsfonts/cm/cmbx7.pfb><C:/Program Files/MiKTeX 2.9/fon
+ts/type1/public/amsfonts/cm/cmbx9.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/
+public/amsfonts/cm/cmex10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/a
+msfonts/cm/cmmi10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/
+cm/cmmi5.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.
+pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/P
+rogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program Fi
+les/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi9.pfb><C:/Program Files/MiKTe
+X 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKTeX 2.9/fon
+ts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/
+public/amsfonts/cm/cmr17.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/am
+sfonts/cm/cmr5.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/
+cmr6.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb><
+C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program
+ Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:/Program Files/MiK
+TeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/
+fonts/type1/public/amsfonts/cm/cmsy5.pfb><C:/Program Files/MiKTeX 2.9/fonts/typ
+e1/public/amsfonts/cm/cmsy7.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public
+/amsfonts/cm/cmsy9.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts
+/cm/cmti10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti
+9.pfb>
+Output written on paper.pdf (23 pages, 1802977 bytes).
 PDF statistics:
- 653 PDF objects out of 1000 (max. 8388607)
- 126 named destinations out of 1000 (max. 500000)
- 203 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 655 PDF objects out of 1000 (max. 8388607)
+ 125 named destinations out of 1000 (max. 500000)
+ 187 words of extra memory for PDF output out of 10000 (max. 10000000)
 

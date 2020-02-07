@@ -103,7 +103,7 @@
 % The documentation is contained in the cite.sty file itself.
 
 
-
+%\usepackage[margin=1.5in]{geometry}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \makeatletter 
@@ -992,8 +992,8 @@ At every MSS iteration, we solve the separated domains on its own. To solve this
 
 \newpage 
 \section{Numerical assessment}
-All previous mentioned methods are implemented into the Matpower\footnote{MATPOWER is a package of free, open-source Matlab-language M-files for solving steady-state power system simulation and optimization problems \cite{Zimmerman2011}} library. Matpower consists of several transmission network test cases. The resources page of IEEE Power \& Energy Society  contains several distribution network test cases which are all explained in \cite{Schneider2018}. These test cases contain the necessary input to solve power flow problems. We created integrated test test cases from the existing transmission and distribution test cases. We used the IEEE 9-bus, 118-bus, and 3120-bus data as transmission network test cases and the IEEE 13-bus and 37-bus data as distribution test cases. The distribution test cases represent the unbalanced characteristics of the network. We modified the 13-bus distribution network to a 10-bus network by deleting the buses connected to the regulator. We changed the loading of the 37-bus network by shifting 20\% of the loads of phase b equally to phase a and c, just like the original authors \cite{Taranto2008}.
-We connected two networks to each other creating the following integrated test cases: 
+All previous mentioned methods are implemented into the Matpower\footnote{MATPOWER is a package of free, open-source Matlab-language M-files for solving steady-state power system simulation and optimization problems \cite{Zimmerman2011}} library. Matpower contains several transmission network test cases. The resources page of IEEE Power \& Energy Society contains several distribution network test cases which are all explained in \cite{Schneider2018}. These test cases contain the necessary input to solve power flow problems on separated networks. We created integrated test cases from the existing transmission and distribution test cases. We used the 9-bus, 118-bus, and 3120-bus data as transmission network test cases and the IEEE 13-bus and 3IEEE 7-bus data as distribution test cases. The distribution test cases represent the unbalanced characteristics of the network. We modified the 13-bus distribution network to a 10-bus network by deleting the buses connected to the regulator. We changed the loading of the 37-bus network by shifting 20\% of the loads of phase b equally to phase a and c, like the original authors \cite{Taranto2008}.
+We connected a transmission and a distribution network to each other to create the following integrated test cases: 
 \begin{itemize}
     \item Test case 1: T9-D13
     \item Test case 2: T9-D37
@@ -1003,33 +1003,34 @@ We connected two networks to each other creating the following integrated test c
     \item Test case 6: T9-3D13 (3 13-bus distribution networks) 
 \end{itemize}
 \paragraph{Connection bus}
-We selected a random load bus in the transmission network to become the connection bus in the integrated network. We choose bus $7$ in the 9-bus network, we choose bus $118$ in the 118-bus network, and we choose bus $3003$ in the 3120-bus network. This could have been any load bus of the original network. The original reference bus of the distribution network becomes the connection bus in the integrated network. \\
-The unified methods puts a transformer between the connection buses. This transformer has the same line admittance as the first distribution cable. The left hand side of the transformer is the transmission connection bus, now having zero load. The right hand side is the distribution connection bus. This is the former reference bus and must be changed to a load bus having the load as the original transmission connection bus \cite{Taranto2008}. The splitting methods do not put a transformer between the networks. They only change the original transmission load bus to a bus having zero load.   \newline \newline
+We selected a random load bus in the transmission network to become the connection bus in the integrated network. We choose bus $7$ in the 9-bus network, we choose bus $118$ in the 118-bus network, and we choose bus $3003$ in the 3120-bus network. This could have been any load bus. The original reference bus of the distribution network becomes the connection bus at the distribution side of the integrated network. \\
+The unified method connects the two connection buses via an extra transformer. This transformer has the same line admittance as the first distribution cable. The distribution connection bus is the former reference bus and must be changed to a load bus. This new load bus should get the same load as the original load from the transmission connection bus \cite{Taranto2008}. The splitting methods do not put a transformer between the networks. They only change the original transmission load bus to a bus having zero load. The distribution reference bus remains a reference bus. The reference voltage magnitude and angle will not be $V=1.0$ pu, but the output it receives from the transmission bus.  \newline \newline
 Test case 5 and 6 have multiple distribution networks connected. These networks are connected to the last 2 and 3 load buses of the transmission networks, where each of the original load bus is changed to a zero load bus. 
 \subsection{Results}
-We are going to compare the above-mentioned methods on accuracy, speed, and convergence to give an insight into which method is favorable to solve integrated networks. 
+We are going to compare all the integration methods on accuracy, speed, and convergence to give an insight into which method is favorable to solve integrated networks. 
 \subsubsection{Accuracy} 
-To check the accuracy of the methods, we compare the voltage output of the integrated methods with the output of the separated methods. We solve the transmission network separately using NR-power and we solve the distribution network separately using NR-TCIM. The distribution domain in the integrated network has no reference bus anymore. In order to compare the voltage profile of this part, we scale the values accordingly. \\
+To check the accuracy of the methods, we compare the voltage output of the integrated methods with the output of the separated methods. We solve the transmission network separately using NR-power and we solve the distribution network separately using NR-TCIM. The distribution domain in the integrated network has no reference bus anymore. In order to compare the voltage profile of this part, we scale the values accordingly. 
 We know that the voltage is given by: \begin{equation}
 V_p=|V|_p\exp{(\iota\delta_{V_p}-\phi)},\quad p\in\{a,b,c\},
 \end{equation}
-where $|V|$ and $\delta$ are set to $|V|=1.0$ pu and $\delta=0$ at the reference bus. We can compare the voltage of the distribution domain to the voltage of the separated domain after scaling. We divide the voltage magnitude of the distribution domain, buses $i=1,...,D_N$ by the voltage magnitude of the distribution connection bus: 
+where $|V|$ and $\delta$ are set to $|V|=1.0$ pu and $\delta=0$ at the reference bus. We can compare the voltage of the distribution domain to the voltage of the separated domain after scaling. We divide the voltage magnitude of the distribution domain, buses $i=1,...,N_D$, by the voltage magnitude of the distribution connection bus: 
 \begin{equation}
-|V|_{i,{D_{new}}} = \frac{|V|_{i,{D_{uns}}}}{|V|_{ref,{D_{uns}}}},\quad i=1,..,D_N.
+|V|_{i,{D_{new}}} = \frac{|V|_{i,{D_{uns}}}}{|V|_{ref,{D_{uns}}}},\quad i=1,..,N_D.
 \label{eq:ViDnew}
 \end{equation}
-The voltage angle represents the phase-shift in relation to the reference bus. In order to compare the integrated output of the voltage angle with the separated output, we subtract the phase-angle of the former reference bus of all the buses of the distribution domain: 
+The subscript $uns$ represents the unscaled values and $new$ represents the scaled values. \newline 
+The voltage angle represents the phase-shift in relation to the phase of the reference bus. In order to compare the integrated output of the voltage angle with the separated output, we subtract the phase-angle of the former reference bus from all the buses $i=1,..,N_D$: 
 \begin{equation}
 \delta_{i,{D_{new}}} ={\delta_{i,{D_{uns}}}}-{\delta_{ref,{D_{uns}}}},\quad i=1,..,D_N.
 \label{eq:dViDnew}
 \end{equation}
 Note that we need to apply \eqref{eq:ViDnew} and \eqref{eq:dViDnew} to all the three phases separately. \newline\newline
-We compare the voltage magnitudes and angles of the integrated network, including the scaled distribution domain, with the magnitudes angles of the separate domains. We take the infinity norm of the relative difference between the voltages: spee
+We compare the voltage magnitudes and angles of the integrated network, including the scaled distribution domain, with the magnitudes angles of the separate domains. We take the infinity norm of the relative difference between the voltages: 
 \begin{equation}
 \mbox{rel. error of } |V|_p = \left|\frac{|V|^*_p - |V|^o_p}{|V|^o_p}\right|_\infty,\quad p\in\{a,b,c\},
 \label{eq:norm|V|}
 \end{equation}
-where the asterisk $*$ marks the outcome of separated networks, and the superscript $o$ the output of separated networks (original). We do this in a similar manner for the voltage angle: 
+where the asterisk $*$ marks the outcome of separated networks, and the superscript $o$ the output of separated networks (o=original). We do this in a similar manner for the voltage angle: 
 \begin{equation}
 \mbox{rel. error of } \delta_p = \left|\frac{\delta^*_p - \delta^o_p}{\delta^o_p}\right|_\infty,\quad p\in\{a,b,c\},
 \label{eq:normdelta}
@@ -1038,41 +1039,42 @@ We have given the relative errors of the voltage magnitude and angle of the thre
 
 \input{allnorms}
 \paragraph{The MAI-scheme}
-Table \ref{tab:relerror} shows that all the integration methods produce accurate results, except for the MSS-homo-MAI and MSS-hybrid-MAI methods. This is caused by the number of iterations per subdomain that has been set too strict. To produce more accurate results, we increased the number of iterations per subdomain simultaneously. We started with $I_{T,max}=I_{D,max}=2$ until $I_{T,max}=I_{D,max}=6$.  Table \ref{tab:MAIschemes} shows the results. Next to the relative error, this table shows the required number of MSS iterations and how long it takes to reach convergence. We only applied these tests on test case T118-D37, as these results were least accurate. When using $4$ iterations per subdomain, the results become as accurate as the MSS-CAI methods. 
+Table \ref{tab:relerror} shows that all the integration methods produce accurate results, except for the MSS-homo-MAI and MSS-hybrid-MAI methods. This is caused by the number of iterations per subdomain that has been set too low. To produce more accurate results, we increased the number of iterations per subdomain simultaneously. We started with $I_{T,max}=I_{D,max}=2$ until $I_{T,max}=I_{D,max}=6$.  Table \ref{tab:MAIschemes} shows the results. Next to the relative error, this table shows the required number of MSS iterations and how long it takes to reach convergence. We only applied these tests on test case T118-D37, as these results were least accurate. When using $4$ iterations per subdomain, the results become as accurate as the MSS-CAI methods. 
 \input{L-MAIN2}
-We plotted the voltage magnitude and angles of the MAI-schemes to show how the solution is with every increase of the maximum number of subiterations approaching its 'true' results. For comparison we plotted the separated transmission and distribution network as 'true' solution. 
-\begin{figure}[!ht]
+We plotted the voltage magnitude and angles of the MAI-schemes to show how the solution, with every increase of the maximum number of subiterations, approaches its `true' results. For comparison we plotted the separated transmission and distribution network as `true' solution in figures \ref{fig:MAIN2} - \ref{fig:ZMAIN1}. 
+
+\begin{figure}[h]
 \centering
 \includegraphics[width=\textwidth]{Images/MAI_N2.eps}
 \caption{Voltage profile (left: magnitude, right: angle) of the MAI-schemes with increasing number of subiterations, applied on homogeneous networks}\label{fig:MAIN2}
 \end{figure}
-\begin{figure}[!ht]
+\begin{figure}[h]
 \centering
 \includegraphics[width=\textwidth]{Images/Z_MAI_N2.eps}
-\caption{A magnified version of the top figure of the buses surrounding the connection bus.}\label{fig:ZMAIN2}
+\caption{A magnified version of figure \ref{fig:MAIN2} of the buses surrounding the connection bus.}\label{fig:ZMAIN2}
 \end{figure}
-\begin{figure}[!ht]
+\begin{figure}[h]
 \centering
 \includegraphics[width=\textwidth]{Images/MAI_N1.eps}
 \caption{Voltage profile (left: magnitude, right: angle) of the MAI-schemes with increasing number of subiterations, applied on hybrid networks}\label{fig:MAIN1}
 \end{figure}
-\begin{figure}[!ht]
+\begin{figure}[h]
 \centering
 \includegraphics[width=\textwidth]{Images/Z_MAI_N1.eps}
-\caption{A magnified version of the top figure of the buses surrounding the connection bus.}\label{fig:ZMAIN1}
+\caption{A magnified version of figure \ref{fig:MAIN1} of the buses surrounding the connection bus.}\label{fig:ZMAIN1}
 \end{figure}
-
+%\newpage 
 
 \subsubsection{Convergence and speed} 
 The previous subsection shows that all the methods produce accurate results. In order to solve realistic power flow problems, which are very large electricity networks, we need insight into the speed of the problems. In this section we compare the integration methods on CPU-time and number of iterations. We share the results in table \ref{tab:speed}. 
 \include{tablespeed}
-These results show that over all the test cases, the full three-phase method performs the least. The rest of the methods are comparable in speed for the small test-cases. The big test case, test-case 5, gives the most significant results. The hybrid network methods are a lot faster than the homogeneous methods. \newline \newline
+\noindent These results show that over all the test cases, the full three-phase method performs the least. The rest of the methods are comparable in speed for the small test-cases. The big test case, test-case 5, gives the most significant results. The hybrid network methods are a lot faster than the homogeneous methods. \newline \newline
 There is not a clear significance in the MSS-CAI- and MAI-schemes. We would recommend to choose the CAI method as this method is only a bit slower than the MAI method, but you will always get accurate results. With the MAI-scheme, you first have to find out how many subiterations are required before convergence.  
 
 \section{Conclusion}
-We have reviewed and assessed two types of integration methods to solve the power flow problem. We classified them as unified and splitting methods and applied them on hybrid and homogeneous networks. We checked if the methods produced accurate results and analyzed the speed and number of iterations before convergence has been reached. \newline
-From this assessment we can conclude that the methods applied on hybrid networks most favourable in sense of CPU-time. This can be easily argued as the size of the Jacobian in the transmission subdomain increases from having size 2n by 2n, to having a size of 6n by 6n. $n$ is the number of transmission buses. The differences between the splitting and unified methods applied on hybrid networks are less significant. We would recommend to choose the unified methods when this is possible. But in geographically distinct locations, or when legislation prohibits system operators to share complete network data, the splitting methods are very valuable. The speed of the CAI-schemes can be reduced when we apply the idea of paragraph \ref{par:caischeme}. \newline\newline
-The next step is to continue with realistic test cases which can be up to millions of buses per subdomain. In most countries, the transmission network is much smaller than the distribution network and a country has most of the time more than one distribution network. The differences between homogeneous and hybrid methods become less significant. Furthermore, these very large networks must be solved in parallel which require other technique. The MSS-method has an advantage here, it is a domain-decomposition approach: multiple distribution networks can run on parallel cores. Doing new simulations using these speed-up techniques on realistically sized networks, should give a better idea which method is most favourable to solve the integrated power flow problem. 
+We have reviewed and assessed two types of integration methods to solve the power flow problem. We classified them as unified and splitting methods and applied them on hybrid and homogeneous networks. We investigated if the methods produced accurate results and analyzed the speed and number of iterations to reach convergence. \newline
+From this assessment we can conclude that the methods applied on hybrid networks are most favorable in sense of CPU-time. This can be easily argued as the size of the Jacobian in the transmission subdomain increases from having size 2n by 2n to having a size of 6n by 6n, $n$ is the number of transmission buses. The differences between the splitting and unified methods applied on hybrid networks are less significant. We would recommend to choose the unified methods when this is possible. But in geographically distinct locations, or when legislation prohibits system operators to share complete network data, the splitting methods are a good alternative. The speed of the CAI-schemes can be reduced if we apply the idea of paragraph \ref{par:caischeme}. \newline\newline
+The next step is to continue with realistic test cases which can be up to millions of buses per subdomain. In most countries, the real transmission network is much smaller than the distribution network and a country has in general more than one distribution network. The differences between homogeneous and hybrid methods then become less significant. Furthermore, these very large networks must be solved in parallel which require other techniques. The MSS-method has an advantage here, as it is a domain-decomposition approach: multiple distribution networks can run on parallel cores. Doing new simulations using these speed-up techniques on realistically sized networks, should give a better idea which method is most favorable to solve the integrated power flow problem. 
 
 %\section{References}
 \newpage
