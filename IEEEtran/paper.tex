@@ -110,7 +110,7 @@
 \renewcommand\thealgorithm{\thesection.\arabic{algorithm}} 
 \@addtoreset{algorithm}{section} 
 \makeatother
-
+\usepackage{color,soul} %highlight 
 % *** GRAPHICS RELATED PACKAGES ***
 %
 %\ifCLASSINFOpdf
@@ -158,6 +158,7 @@
 % *** MATH PACKAGES ***
 %
 % \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{mathtools} %includes and extends `amsmath'. Needed for dcases
 % A popular package from the American Mathematical Society that provides
 % many useful and powerful commands for dealing with mathematics.
@@ -744,6 +745,400 @@ The specified current ${I_s}$ and computed current ${I}\left({V}\right)$ are cal
     {I_{s,i}} = \left(\frac{\overline{S_s}}{V}\right)_i\quad\mbox{and}\quad I(V)_i = \mathbf{Y}V_i 
 \end{align}
 The Jacobian is formed by taking the derivative of the real and imaginary current mismatch with respect to the real and imaginary voltage.
+\subsection{Modeling elements in three-phase configuration}\hl{Voeg hier een opmerking toe dat ene noads elements zijn, andere series elements. dat we total Ybus matrix moeten bepalen en daar series elementen belangrijk zijn.}
+Loads, shunts, and transformers in three-phase networks are placed in a Wye or Delta configuration. Other elements that we have not seen so far in transmission networks are regulators. Regulators are placed along the distribution feeder to regulate the voltage distribution. 
+\subsubsection{Loads and shunts}
+Loads are modeled as buses where active and reactive power ($P$ and $Q$) are specified. They are modeled as a function of the voltage in which the load-model type (constant power/current/impedance) determines the relation between power and voltage:  
+\begin{enumerate}
+    \item Constant Power models (P): power is independent of the change in voltage magnitude, which is expressed as: $$
+    \frac{P}{P_0} =1 \quad\mbox{and}\quad \frac{Q}{Q_0}=1
+    $$
+    \item Constant Current models (I): power is related to the voltage magnitude as: $$
+        \frac{P}{P_0} =\frac{|V|}{|V_0|} \quad\mbox{and}\quad \frac{Q}{Q_0}=\frac{|V|}{|V_0|}
+    $$
+    \hl{quote: A constant current load is one which varies its internal resistance to achieve a constant current regardless of the voltage which is being fed to it and therefore the power will vary. In other words, a constant current load would draw approx the same amount of current, despite wide variations in the source voltage or other impedances in the circuit.}
+    \item Constant Impedance models (Z): power is related to the square of the voltage magnitude: $$
+        \frac{P}{P_0} =(\frac{|V|}{|V_0|})^2 \quad\mbox{and}\quad \frac{Q}{Q_0}=(\frac{|V|}{|V_0|})^2
+    $$
+\end{enumerate}
+\hl{The $|V_0|$ is the nominal voltage magnitude. In p.u. calculations, this is equal to 1. }\\ 
+Loads are physically connected in a grounded Wye or ungrounded Delta configuration. In the grounded Wye configuration all the three phases are connected to a single neutral point. These neutral point is connected to the ground by a fourth wire: the neutral conductor. The voltage is specified line-to-neutral.
+In an ungrounded Delta configuration the loads are connected phase-to-phase without a neutral conductor. Here, the voltage is specified phase-to-phase, also called line-to-line. The line-to-line voltages of a three-phase Delta-configuration are: $V^{ab}$, $V^{bc}$, and $V^{ca}$.  The line-to-line voltages and line-to-neutral voltages ($V^a$, $V^b$, and $V^c$) in this configuration are related as follows:
+\begin{align}
+    V^{ab} = V^a - V^b,\\ 
+    V^{bc} = V^b - V^c,\\ 
+    V^{ca} = V^c - V^a.\\ 
+\end{align}
+The line-to-neutral currents are related to line-to-line voltages according: 
+\begin{align}
+    I^a=I^{ab}-I^{ca},\\
+    I^b=I^{bc}-I^{ab},\\
+    I^c=I^{ca}-I^{bc}.
+\end{align}
+In the following lines we clarify the relationship of the ZIP-load models in a Wye and Delta configuration. 
+\subparagraph{Wye - P}
+We know that power is independent of voltage magnitude: \begin{equation}
+    \frac{P}{P_0}=1,\ \frac{Q}{Q_0}=1\ \Leftrightarrow\ S := P +\iota Q = P_0 + \iota Q_0
+\end{equation}
+For phases $a$, $b$, and $c$ this means that for each load bus $i$ the active and reactive power are expressed as follows: 
+\begin{align}
+    \begin{bmatrix}
+    S^a\\
+    S^b\\
+    S^c
+    \end{bmatrix}_i := \begin{bmatrix}
+    P^a +\iota Q^a\\
+    P^b +\iota Q^b\\
+    P^c +\iota Q^c
+    \end{bmatrix}_i = \begin{bmatrix}
+    P^a_0 +\iota Q^a_0\\
+    P^b_0 +\iota Q^b_0\\
+    P^c_0 +\iota Q^c_0
+    \end{bmatrix}_i 
+\end{align}
+\subparagraph{Wye - I}
+Constant current load models vary their power $S$ with voltage magnitude, leading to the following relationship: 
+\begin{equation}
+    \frac{P}{P_0}=|V|,\ \frac{Q}{Q_0}=|V|\ \Leftrightarrow\ S := P +\iota Q = (P_0 + \iota Q_0)|V|
+\end{equation}
+For phases $a$, $b$, and $c$ this means that for each load bus $i$ the active and reactive power are expressed as follows: 
+\begin{align}
+    \begin{bmatrix}
+    S^a\\
+    S^b\\
+    S^c
+    \end{bmatrix}_i := \begin{bmatrix}
+    P^a +\iota Q^a\\
+    P^b +\iota Q^b\\
+    P^c +\iota Q^c
+    \end{bmatrix}_i = \begin{bmatrix}
+    (P^a_0 +\iota Q^a_0)(|V^a|)\\
+    (P^b_0 +\iota Q^b_0)(|V^b|)\\
+    (P^c_0 +\iota Q^c_0)(|V^c|)
+    \end{bmatrix}_i 
+\end{align}
+\subparagraph{Wye - Z}
+Constant impedance models vary their power with the square of voltage magnitude, leading to the following: 
+\begin{equation}
+    \frac{P}{P_0}=|V|^2,\ \frac{Q}{Q_0}=|V|^2\ \Leftrightarrow\ S := P +\iota Q = (P_0 + \iota Q_0)|V|^2
+\end{equation}
+For phases $a$, $b$, and $c$ this means that for each load bus $i$ the active and reactive power are expressed as follows: 
+\begin{align}
+    \begin{bmatrix}
+    S^a\\
+    S^b\\
+    S^c
+    \end{bmatrix}_i := \begin{bmatrix}
+    P^a +\iota Q^a\\
+    P^b +\iota Q^b\\
+    P^c +\iota Q^c
+    \end{bmatrix}_i = \begin{bmatrix}
+    (P^a_0 +\iota Q^a_0)(|V^a|^2)\\
+    (P^b_0 +\iota Q^b_0)(|V^b|^2)\\
+    (P^c_0 +\iota Q^c_0)(|V^c|^2)
+    \end{bmatrix}_i 
+\end{align}
+We solve the three-phase distribution systems with the NR-TCIM method, which implies that we need the specified currents $I_s$ in our mismatch equation \hl{(add reference to equation)} instead of specified powers. As currents are never measured in a power system, they are conducted from the specified power according the relationship: 
+\begin{equation}
+    S=VI^*\ \Leftrightarrow\ I = (\frac{S}{V})^*
+\end{equation}
+If we divide the expressions of the loads $S$ by $V$ and take the conjugate of this new relation we get the expression for the specified currents:
+\subparagraph{Wye - P }
+\begin{equation}
+    I := (\frac{S}{V})^* = (\frac{P_0+\iota Q_0}{V})^*
+\end{equation}
+Or in three-phase matrix: 
+\begin{align}
+\begin{bmatrix}
+    I^a\\
+    I^b\\
+    I^c
+    \end{bmatrix}_i = \begin{bmatrix}
+   (\frac{ P^a +\iota Q^a}{V^a})^*\\
+    (\frac{ P^b +\iota Q^b}{V^b})^*\\
+    (\frac{ P^c +\iota Q^c}{V^c})^*
+    \end{bmatrix}_i 
+    \end{align}
+\subparagraph{Wye - I }
+\begin{equation}
+    I := (\frac{S|V|}{V})^* = (P_0+\iota Q_0)^*\frac{|V|}{V^*} = (P_0+\iota Q_0)^*\frac{V}{|V|}
+\end{equation}
+Or in three-phase matrix: 
+\begin{align}
+\begin{bmatrix}
+    I^a\\
+    I^b\\
+    I^c
+    \end{bmatrix}_i = \begin{bmatrix}
+    ({ P^a +\iota Q^a})^*\frac{V^a}{|V^a|}\\
+    ({ P^b +\iota Q^b})\frac{V^b}{|V^b|}\\
+    ({ P^c +\iota Q^c})^*\frac{V^c}{|V^c|})
+    \end{bmatrix}_i 
+    \end{align}
+    
+\subparagraph{Wye - Z }
+\begin{equation}
+    I := (\frac{S|V|^2}{V})^* = ({P_0+\iota Q_0})^*\frac{|V|^2}{V^*} = ({P_0+\iota Q_0})^*\frac{VV^*}{V^*} =  ({P_0+\iota Q_0})^*V
+\end{equation}
+Or in three-phase matrix: 
+\begin{align}
+\begin{bmatrix}
+    I^a\\
+    I^b\\
+    I^c
+    \end{bmatrix}_i = \begin{bmatrix}
+   ({ P^a +\iota Q^a})^*{V^a}\\
+    ({ P^b +\iota Q^b})^*{V^b}\\
+    ({ P^c +\iota Q^c})^*{V^c}
+    \end{bmatrix}_i 
+    \end{align}
+\paragraph{Delta loads}
+Delta loads are expressed by line-to-line voltages and currents while we need line-to-neutral currents for our calculations. We express the line-to-neutral currents directly for the three load models using \begin{align}
+    I^a=I^{ab}-I^{ca},\\
+    I^b=I^{bc}-I^{ab},\\
+    I^c=I^{ca}-I^{bc}.
+\end{align}
+\subparagraph{Delta - P}
+\begin{align}
+\begin{bmatrix}
+    I^a\\
+    I^b\\
+    I^c
+    \end{bmatrix}_i := \begin{bmatrix}
+    I^{ab}-I^{ca}\\
+    I^{bc}-I^{ab}\\
+    I^{ca}-I^{bc}
+    \end{bmatrix}_i = \begin{bmatrix}
+   (\frac{ P^{ab} +\iota Q^{ab}}{V^a-V^b})^* - (\frac{ P^{ca} +\iota Q^{ca}}{V^c-V^a})^* \\
+    (\frac{ P^{bc} +\iota Q^{bc}}{V^b-V^c})^* - (\frac{ P^{ab} +\iota Q^{ab}}{V^a-V^b})^*\\
+    (\frac{ P^{ca} +\iota Q^{ca}}{V^c-V^a})^* - (\frac{ P^{bc} +\iota Q^{bc}}{V^b-V^c})^*
+    \end{bmatrix}_i 
+    \end{align}
+\subparagraph{Delta - I }
+\begin{align}
+\begin{bmatrix}
+    I^a\\
+    I^b\\
+    I^c
+    \end{bmatrix}_i = \begin{bmatrix}
+    ({ P^{ab} +\iota Q^{ab}})^*\frac{(V^a-V^b)}{|V^a-V^b|} - ({ P^{ca} +\iota Q^{ca}})^*\frac{(V^c-V^a)}{|V^c-V^a|}  \\
+    ({ P^{bc} +\iota Q^{bc}})^*\frac{(V^b-V^c)}{|V^b-V^c|} - ({ P^{ab} +\iota Q^{ab}})^*\frac{(V^a-V^b)}{|V^a-V^b|}\\
+    ({ P^{ca} +\iota Q^{ca}})^*\frac{(V^c-V^a)}{|V^c-V^a|} -  ({ P^{bc} +\iota Q^{bc}})^*\frac{(V^b-V^c)}{|V^b-V^c|}
+    \end{bmatrix}_i 
+    \end{align}
+    
+\subparagraph{Delta - Z }
+ 
+\begin{align}
+\begin{bmatrix}
+    I^a\\
+    I^b\\
+    I^c
+    \end{bmatrix}_i = \begin{bmatrix}
+   ({ P^{ab} +\iota Q^{ab}})^*{(V^a-V^b)} - ({ P^{ca} +\iota Q^{ca}})^*{(V^c-V^a)} \\
+     ({ P^{bc} +\iota Q^{bc}})^*{(V^b-V^c)} -  ({ P^{ab} +\iota Q^{ab}})^*{(V^a-V^b)}\\
+    ({ P^{ca} +\iota Q^{ca}})^*{(V^c-V^a)} - ({ P^{bc} +\iota Q^{bc}})^*{(V^b-V^c)}
+    \end{bmatrix}_i 
+    \end{align}
+
+\paragraph{Overview of load models}
+ We give an overview of the three constant load models (P, I, and Z) in Wye and Delta configuration.
+ \begin{table}[h]
+\renewcommand{\arraystretch}{1.3}
+\centering
+\caption{Specified line-to-neutral currents of load bus $i$ in Wye and Delta configuration, given for different load models (ZIP). }\label{tab:ZIPmodels}
+\begin{adjustbox}{width=1\textwidth} %, angle=90}
+\small
+\begin{tabular}{ccccc}
+\toprule
+{} && {Y} && {$\Delta$}  \\
+
+ load model &&        Wye  &&        Delta\\
+\midrule
+Z   &&  $  \begin{bmatrix}
+   ({ P^a +\iota Q^a})^*{V^a}\\
+    ({ P^b +\iota Q^b})^*{V^b}\\
+    ({ P^c +\iota Q^c})^*{V^c}
+    \end{bmatrix}_i $ && $  \begin{bmatrix}
+   ({ P^{ab} +\iota Q^{ab}})^*{(V^a-V^b)} - ({ P^{ca} +\iota Q^{ca}})^*{(V^c-V^a)} \\
+     ({ P^{bc} +\iota Q^{bc}})^*{(V^b-V^c)} -  ({ P^{ab} +\iota Q^{ab}})^*{(V^a-V^b)}\\
+    ({ P^{ca} +\iota Q^{ca}})^*{(V^c-V^a)} - ({ P^{bc} +\iota Q^{bc}})^*{(V^b-V^c)}
+    \end{bmatrix}_i $  \\  \midrule 
+I   &&  $ \begin{bmatrix}
+    ({ P^a +\iota Q^a})^*\frac{V^a}{|V^a|}\\
+    ({ P^b +\iota Q^b})\frac{V^b}{|V^b|}\\
+    ({ P^c +\iota Q^c})^*\frac{V^c}{|V^c|})
+    \end{bmatrix}_i  $ &&   $ \begin{bmatrix}
+    ({ P^{ab} +\iota Q^{ab}})^*\frac{(V^a-V^b)}{|V^a-V^b|} - ({ P^{ca} +\iota Q^{ca}})^*\frac{(V^c-V^a)}{|V^c-V^a|}  \\
+    ({ P^{bc} +\iota Q^{bc}})^*\frac{(V^b-V^c)}{|V^b-V^c|} - ({ P^{ab} +\iota Q^{ab}})^*\frac{(V^a-V^b)}{|V^a-V^b|}\\
+    ({ P^{ca} +\iota Q^{ca}})^*\frac{(V^c-V^a)}{|V^c-V^a|} -  ({ P^{bc} +\iota Q^{bc}})^*\frac{(V^b-V^c)}{|V^b-V^c|}
+    \end{bmatrix}_i $  \\ \midrule 
+P   &&  $ \begin{bmatrix} 
+   (\frac{ P^a +\iota Q^a}{V^a})^*\\
+    (\frac{ P^b +\iota Q^b}{V^b})^*\\
+    (\frac{ P^c +\iota Q^c}{V^c})^*
+    \end{bmatrix}_i $ &&   $  \begin{bmatrix}
+   (\frac{ P^{ab} +\iota Q^{ab}}{V^a-V^b})^* - (\frac{ P^{ca} +\iota Q^{ca}}{V^c-V^a})^* \\
+    (\frac{ P^{bc} +\iota Q^{bc}}{V^b-V^c})^* - (\frac{ P^{ab} +\iota Q^{ab}}{V^a-V^b})^*\\
+    (\frac{ P^{ca} +\iota Q^{ca}}{V^c-V^a})^* - (\frac{ P^{bc} +\iota Q^{bc}}{V^b-V^c})^*
+    \end{bmatrix}_i $ \\
+
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}
+\hl{Note: update Jacobian according new load models}
+
+\subsubsection{Transformers}
+Transformers are placed between two networks that have different voltage levels. The primary side ($p$) of the transformer is connected to the higher voltage network and the secondary side ($s$) is connected to the voltage level. The transformer in a power system is represented by two blocks:
+\begin{itemize}
+    \item An admittance matrix block, $Y^{abc}_T$, consisting of per-unit leakage admittance $y_t$, and  
+    \item A shunt block that models core losses. The shunt block can be represented by voltage dependent loads and follow the representation in Tab. \ref{tab:ZIPmodels}. 
+\end{itemize}
+The admittance matrix block is given in a similar manner as the $Y_{bus}$ matrix of a distribution cable, now consisting of leakage admittance of the transformer: \begin{equation}
+    Y^{abc}_T = \begin{bmatrix}
+    Y_{pp}^{abc} & Y^{abc}_{ps} \\
+     Y_{sp}^{abc} & Y^{abc}_{ss}
+    \end{bmatrix}.
+\end{equation}
+Each block $Y^{abc}_{ij}$, $i,\ j\in\{p,s\}$ has a different configuration. This configuration depends on the connection of the transformer and is either one of the three following blocks: \begin{equation}\resizebox{0.91\columnwidth}{!}{%
+$
+    Y_1=\begin{bmatrix}
+    y_t & 0 & 0 \\
+    0 & y_t & 0 \\
+    0 & 0 & y_t
+    \end{bmatrix},\quad Y_2=\frac{1}{3}\begin{bmatrix}
+    2y_t & -y_t & -y_t \\
+    -y_t & 2y_t & -y_t \\
+    -y_t & -y_t & 2y_t
+    \end{bmatrix},\quad\mbox{and}\quad Y_3=\frac{1}{\sqrt{3}}\begin{bmatrix}
+    -y_t & y_t & 0 \\
+    0 & -y_t & y_t \\
+    y_t & 0 & -y_t 
+    \end{bmatrix}. $%
+    }
+\end{equation}
+Tab. represents the corresponding block per transformer configuration. \\
+The pu leakage admittance $y_t$ consists of resistance $r$ and reactance $x$ of the transformer and should \hl{be corrected for the correct base grounds}, resulting in: 
+\begin{equation}
+    y_t = \frac{1}{z_t},\quad\mbox{where } z_t = (r+\iota x)(\frac{V_{low}}{V_{base}})^2\frac{S_{base}}{VA},
+\end{equation}
+\hl{where $r$ and $x$ are given in percentages, $V_{low}$ is the voltage at the secondary level of the transformer, and $VA$ is volt-ampere, the unity of apparent power, of the transformer.  }
+Several transformer connections exist, which define the choice of the four blocks of the admittance matrix $Y_T^{abc}$. The correct blocks are described in Tab. \ref{tab:trafoblocks}. 
+
+ \begin{table}[h]
+\renewcommand{\arraystretch}{1.1}
+\centering
+\caption{Specified line-to-neutral currents of load bus $i$ in Wye and Delta configuration, given for different load models (ZIP). }\label{tab:trafoblocks}
+%\begin{adjustbox}{width=1\textwidth} %, angle=90}
+\small
+\begin{tabular}{ccccccc}
+\toprule
+\multicolumn{2}{c}{\textbf{Transformer model}} && \multicolumn{4}{c}{}  \\ 
+\midrule
+Primary & Secondary && $Y_{pp}^{abc}$ & $Y_{ps}^{abc}$ & $Y_{sp}^{abc}$ & $Y_{ss}^{abc}$  \\
+\midrule 
+Wye-G & Wye-G && $Y_1$ & $-Y_1$ & $-Y_1$ & $Y_1$\\
+Wye-G & Wye   && $Y_2$ & $-Y_2$ & $-Y_2$ & $Y_2$\\
+Wye-G & Delta && $Y_1$ & $Y_3$ & $Y_3^T$ & $Y_2$\\
+Wye & Wye-G   && $Y_2$ & $-Y_2$ & $-Y_2$ & $Y_2$\\
+Wye & Wye     && $Y_2$ & $-Y_2$ & $-Y_2$ & $Y_2$\\
+Wye & Delta   && $Y_2$ & $Y_3$ & $Y_3^T$ & $Y_2$\\
+Delta & Wye-G && $Y_2$ & $Y_3^T$ & $Y_3$ & $Y_1$\\
+Delta & Wye   && $Y_2$ & $Y_3^T$ & $Y_3$ & $Y_2$\\
+Delta & Delta && $Y_2$ & $-Y_2$ & $-Y_2$ & $Y_2$\\
+\bottomrule
+\end{tabular}
+%\end{adjustbox}
+\end{table}
+
+\subsubsection{Step-Voltage Regulators}
+Step-Voltage Regulators (SVRs) are installed along distribution feeders, often after the substation, but also at other locations, to control the voltage along the feeder and to keep it within an acceptable range.  \\
+In short, the SVR is an automatic transformer that can change its tap ratio. The tap ratio of a transformer is responsible for the voltage level at the secondary side of a transformer, the output voltage. In a SVR, this voltage is measured; if it falls outside the safety range, the tap ratio changes to a different position to adjust the output voltage. This continues until the voltage is within acceptable limits.
+In our load-flow  computations, we are not implementing a SVR that changes its tap ratio automatically. We pre-determine the `safe' tap-ratios based on output data of openDSS. With these data we model the SVR directly. \newline
+A SVR is modeled as a block that is placed between any connected pair of buses ($n$,$m$). The  voltages and currents of the primary (bus $n$) and secondary side (bus $m$) of the SVR are related via matrices:  $A_V$, $A_I$, and $Z_R\in\mathbb{C}^{6x6}$. The first one represents voltage gain, the second current gain, and the last impedance. $A_I$ and $A_V$ consists of effective regulator ratio $a_R$ and $Z_R$ consists of pu series impedance $z_R$ of the SVR. Having determined the tap-ratio, $a_R$ is:
+\begin{equation}
+    a_R = 1\mp 0.000625tap. 
+\end{equation}Three-phase SVRs are commonly configured as Wye, closed-delta, and open-delta. Just like transformers, these configurations determine the entities of the three blocks $A_I$, $A_V$, and $Z_R$. It holds that:  \begin{equation}
+    A_V^-{-1}=A_I^T.
+\end{equation}
+With these three blocks we form the SVR-admittance matrix, $Y^{abc}_{R}$, that can be incorporated in the final nodal admittance matrix of the feeder, $Y_{bus}$. \hl{Say this also in transformer section}. 
+The admittance matrix $Y^{abc}_R$ looks as follows:
+\begin{equation}Y^{abc}_{R}=
+\begin{bmatrix}
+A_I F_R^{-1}Y^{abc}_{nn}A_I^T & -A_I F_R^{-1}Y^{abc}_{nm} \\ 
+-Y^{abc}_{mn}F_R^{-T}A_I^T & Y^{abc}_{mm}-Y^{abc}_{mn} A_I^TZ_RA_IF_R^{-1}Y^{abc}_{nm} 
+\end{bmatrix}
+\end{equation}
+$Y^{abc}_{ij},\ i,j\in\{n,m\}$ consists of the admittance matrix of the distribution line along which the regulator is placed and $F_R$ and $F_R^{-T}$ are defined as follows: 
+\begin{align}
+    F_R &= \mathbf{I}_{3\times 3}+Y^{abc}_{nn}A_I^TZ_RA_I,\\
+    F_R^{-T} &= \mathbf{I}_{3\times 3} - A_I^T Z_R A_I F_R^{-1}Y_{nn}^{abc}. 
+\end{align}
+If the auto-transformer of the SVR is ideal, it means that the tap-ratio is equal to $0$ and that the impedance matrix is $0$, $Z_R=0$. This results into $F_R$ being the identity matrix: $\mathbf{I}_{3\times 3}$. The admittance matrix of an ideal SVR becomes the following:
+\begin{equation}
+    Y^{abc}_{R,ideal}
+= \begin{bmatrix}
+A_I Y^{abc}_{nn}A_I^T & -A_I  Y^{abc}_{nm} \\ 
+-Y^{abc}_{mn}A_I^T & Y^{abc}_{mm}
+\end{bmatrix}.
+\end{equation}
+We refer to paper \cite{} on how to derive the blocks $A_I$, $A_V$, and $Z_R$. We list the entities of these blocks, per SVR configuration, in Tab. \ref{tab:svrent}.
+ \begin{table}[h]
+\renewcommand{\arraystretch}{1.1}
+\centering
+\caption{Specified line-to-neutral currents of load bus $i$ in Wye and Delta configuration, given for different load models (ZIP). }\label{tab:svrent}
+\begin{adjustbox}{width=1\textwidth} %, angle=90}
+\small
+\begin{tabular}{ccccc}
+\toprule
+{\textbf{SVR  connection}} && $A_I$ & $A_V$ & $Z_R$   \\
+\midrule 
+Wye && $\begin{bmatrix}
+\frac{1}{a_{R_a}} & 0 & 0 \\
+0 & \frac{1}{a_{R_b}}  & 0 \\
+0 & 0 & \frac{1}{a_{R_c}} 
+\end{bmatrix}$ & $\begin{bmatrix}
+a_{R_a} & 0 & 0 \\
+0 & a_{R_b} & 0 \\
+0 & 0 & a_{R_c}
+\end{bmatrix}$ & $\begin{bmatrix}
+Z_{R_a} & 0 & 0 \\
+0 & Z_{R_b} & 0 \\
+0 & 0 & Z_{R_c} 
+\end{bmatrix}$ \\
+Closed-Delta  && $\begin{bmatrix}
+a_{R_{ab}} & 0 & 1-a_{R_{ca}} \\
+1 - a_{R_{ab}} & a_{R_{bc}} & 0 \\
+0 & 1- a_{R_{bc}}  & a_{R_{ca}}
+\end{bmatrix}^{-1}$  & $\begin{bmatrix}
+a_{R_{ab}} & 1-a_{R_{ab}} & 0 \\
+0 & a_{R_{bc}} & 1-a_{R_{bc}} \\
+1- a_{R_{ca}} & 0 & a_{R_{ca}}
+\end{bmatrix}$  & $\begin{bmatrix}
+Z_{R_{ab}} & 0 & 0 \\
+0 & Z_{R_{bc}} & 0 \\
+0 & 0 & Z_{R_{ca}} 
+\end{bmatrix}$ \\
+Open-Delta && $\begin{bmatrix}
+\frac{1}{a_{R_{ab}}} & 0 & 0 \\
+1 - \frac{1}{a_{R_{ab}}} & 1 & 1 - \frac{1}{a_{R_{cb}}}\\
+0 & 0  &   \frac{1}{a_{R_{cb}}}
+\end{bmatrix}$  & $\begin{bmatrix}
+a_{R_{ab}} & 1-a_{R_{ab}} & 0 \\
+0 & 1 & 0 \\
+0 & 1- a_{R_{cb}} &  a_{R_{cb}}
+\end{bmatrix}$  & $\begin{bmatrix}
+Z_{R_{ab}} & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & Z_{R_{cb}} 
+\end{bmatrix}$  \\
+
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}
+
 \section{Integrating transmission and distribution networks}
 Transmission networks and distribution networks are connected to each other via a substation. In separate network models, this substation is modeled as a single-bus containing the information of the other system. In transmission network models, this substation is modeled as a load bus. In distribution network models, the substation is modeled as the slack bus. The total load in the transmission model is equal to the total generated power of the slack bus in the distribution model. The difference of the substation as load bus, is that the parameters $S$ and $V$ are modeled as single-phase quantities, while in the distribution model as three-phase quantities. Figure \ref{fig:boundary} shows this information mismatch. Table \ref{tab:substationbus} shows the single-phase and three-phase representation of $S$, $V$ and $Y$ in the network models. 
 \begin{figure}
