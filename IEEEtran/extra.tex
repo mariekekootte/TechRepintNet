@@ -1,0 +1,55 @@
+\subsubsection{Accuracy} 
+To check the accuracy of the methods, we compare the voltage output of the integrated methods with the output of the separated methods. We solve the transmission network separately using NR-power and we solve the distribution network separately using NR-TCIM. The distribution domain in the integrated network has no reference bus anymore. In order to compare the voltage profile of this part, we scale the values accordingly. 
+We know that the voltage is given by: \begin{equation}
+V_p=|V|_p\exp{(\iota\delta_{V_p}-\phi)},\quad p\in\{a,b,c\},
+\end{equation}
+where $|V|$ and $\delta$ are set to $|V|=1.0$ pu and $\delta=0$ at the reference bus. We can compare the voltage of the distribution domain to the voltage of the separated domain after scaling. We divide the voltage magnitude of the distribution domain, buses $i=1,...,N_D$, by the voltage magnitude of the distribution connection bus: 
+\begin{equation}
+|V|_{i,{D_{new}}} = \frac{|V|_{i,{D_{uns}}}}{|V|_{ref,{D_{uns}}}},\quad i=1,..,N_D.
+\label{eq:ViDnew}
+\end{equation}
+The subscript $uns$ represents the unscaled values and $new$ represents the scaled values. \newline 
+The voltage angle represents the phase-shift in relation to the phase of the reference bus. In order to compare the integrated output of the voltage angle with the separated output, we subtract the phase-angle of the former reference bus from all the buses $i=1,..,N_D$: 
+\begin{equation}
+\delta_{i,{D_{new}}} ={\delta_{i,{D_{uns}}}}-{\delta_{ref,{D_{uns}}}},\quad i=1,..,D_N.
+\label{eq:dViDnew}
+\end{equation}
+Note that we need to apply \eqref{eq:ViDnew} and \eqref{eq:dViDnew} to all the three phases separately. \newline\newline
+We compare the voltage magnitudes and angles of the integrated network, including the scaled distribution domain, with the magnitudes angles of the separate domains. We take the infinity norm of the relative difference between the voltages: 
+\begin{equation}
+\mbox{rel. error of } |V|_p = \left|\frac{|V|^*_p - |V|^o_p}{|V|^o_p}\right|_\infty,\quad p\in\{a,b,c\},
+\label{eq:norm|V|}
+\end{equation}
+where the asterisk $*$ marks the outcome of separated networks, and the superscript $o$ the output of separated networks (o=original). We do this in a similar manner for the voltage angle: 
+\begin{equation}
+\mbox{rel. error of } \delta_p = \left|\frac{\delta^*_p - \delta^o_p}{\delta^o_p}\right|_\infty,\quad p\in\{a,b,c\},
+\label{eq:normdelta}
+\end{equation}
+We have given the relative errors of the voltage magnitude and angle of the three phases for all the test cases in table \ref{tab:relerror}. 
+
+\input{allnorms}
+\paragraph{The MAI-scheme}
+Table \ref{tab:relerror} shows that all the integration methods produce accurate results, except for the MSS-homo-MAI and MSS-hybrid-MAI methods. This is caused by the number of iterations per subdomain that has been set too low. To produce more accurate results, we increased the number of iterations per subdomain simultaneously. We started with $I_{T,max}=I_{D,max}=2$ until $I_{T,max}=I_{D,max}=6$.  Table \ref{tab:MAIschemes} shows the results. Next to the relative error, this table shows the required number of MSS iterations and how long it takes to reach convergence. We only applied these tests on test case T118-D37, as these results were least accurate. When using $4$ iterations per subdomain, the results become as accurate as the MSS-CAI methods. 
+\input{L-MAIN2}
+We plotted the voltage magnitude and angles of the MAI-schemes to show how the solution, with every increase of the maximum number of subiterations, approaches its `true' results. For comparison we plotted the separated transmission and distribution network as `true' solution in figures \ref{fig:MAIN2} - \ref{fig:ZMAIN1}. 
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{Images/MAI_N2.eps}
+\caption{Voltage profile (left: magnitude, right: angle) of the MAI-schemes with increasing number of subiterations, applied on homogeneous networks}\label{fig:MAIN2}
+\end{figure}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{Images/Z_MAI_N2.eps}
+\caption{A magnified version of figure \ref{fig:MAIN2} of the buses surrounding the connection bus.}\label{fig:ZMAIN2}
+\end{figure}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{Images/MAI_N1.eps}
+\caption{Voltage profile (left: magnitude, right: angle) of the MAI-schemes with increasing number of subiterations, applied on hybrid networks}\label{fig:MAIN1}
+\end{figure}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{Images/Z_MAI_N1.eps}
+\caption{A magnified version of figure \ref{fig:MAIN1} of the buses surrounding the connection bus.}\label{fig:ZMAIN1}
+\end{figure}

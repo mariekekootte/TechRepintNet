@@ -456,7 +456,7 @@
 \usepackage{multirow}
 \usepackage{booktabs} %for fancy tables
 \usepackage{adjustbox}
-
+\usepackage{multicol}
 \usepackage{todonotes} 
 % \usepackage[disable]{todonotes} %Hides all(!) todonotes
 % todonotes appearance
@@ -626,11 +626,20 @@ Several numerical methods are available to solve the power flow problem on integ
 %-------------
 \section{Introduction}
 %Field, Gap, Focus 
-Power flow computations are used to simulate the transport, generation, and consumption of power in electricity networks. The simulations are important for safe operation and planning of the electricity grid. An electricity grid consists of one transmission network, responsible for transport of power over large distances, and several distribution networks, responsible for the transport to end-consumers. Transmission networks transport high-voltage power to substations from where power is converted to a lower voltage level. The distribution network transports low-voltage power from substations to end-consumers. These transmission and distribution domains are separately analyzed where one domain is modeled in detail and the other is simplified in this model to one bus. Eg: in the analysis of the transmission system, the distribution network is simplified to one load in the transmission model. In the analysis of the distribution system,  the transmission network is simplified as a generator.  \newline\newline
-The power system is changing: more renewable energy is entering the grid at distribution level, we see an increase of demand-side participation as a mechanism to balance frequency, and we see an increase of electricity consumption. The changing environment requires a more detailed analysis of the electricity network and a more complex model of the interaction between the networks. Integrated transmission-distribution network models study the interaction that these networks have on each other. But it is not straight-forward to integrate these separate domains. The networks have different characteristics what has resulted in different network models that cannot be easily integrated. The most important difference is that the transmission network is balanced and therefore modeled in single-phase while the distribution network is in general not balanced and modeled in three-phase. 
-Furthermore, the different characteristics have lead to the development of different algorithms to solve the power flow problem. The power flow problem is a nonlinear problem which is solved using iterative methods. Well-known algorithms to solve transmission systems are: Gauss-Seidel, Newton-Raphson, Decoupled loadflow, and DC loadflow \cite{Schavemaker2008chap6}. These solvers have been adapted to distribution solvers, among which the most well-known are: Newton-Raphson current mismatch \cite{Garcia2000}\cite{Abdel-akher2005}, implicit $Z_{bus}$ \cite{Teng2002a}\cite{Chen1991a}, BIBC/BCBV \cite{Teng2008}\cite{Farag2011}, and Forward/Backward Sweep \cite{Moghaddas2009}\cite{Eminoglu2008} methods. Besides the technical complexity of integrating network models, we have the issue of confidentiality. System operators are not willing or not allowed to share network information with other system operators. \textit{One can reason that conventional models will at a certain moment not suffice anymore. \todo{De volgende zin moet er helemaal niet in of vriendelijker verwoord worden}Lagging legislation will then follow the necessary change towards integrating network models. 
-}\newline\newline 
-Integrated networks can be modeled as homogeneous and as hybrid networks. A homogeneous network model is a three-phase representation of both the transmission and distribution network. A hybrid network model consists of a single-phase transmission and a three-phase distribution network. Several numerical methods have been developed to solve integrated networks. They can be classified as a unified \cite{Taranto2008} or as a splitting method \cite{Sun2005}.  The unified methods solve the integrated system as a whole. The splitting method divides the networks into a master and a slave and defines an extra iterative scheme between them. At every iteration, the separated systems are solved on its own. The integrated system is solved once convergence on the boundary between the systems have been reached. This article reviews the proposed integration methods and analyzes them by running simulations on small test-cases. We pay special attention to their convergence behaviour: CPU-time and the number of iterations. 
+Power flow computations are used to simulate the transport, generation, and consumption of power in electricity networks. The simulations are important for safe operation and planning of the electricity grid \todo{source}. A national electricity grid consists of one transmission network, responsible for transport of power over large distances, and several distribution networks, responsible for the transport to end-consumers. Transmission networks transport high-voltage power to substations from where power is converted to a lower voltage level. The distribution network transports low-voltage power from substations to end-consumers. These transmission and distribution domains are currently separately analyzed: In the analysis of the first, the transmission network is modeled in detail while the distribution network is modeled as an equivalent load. In the analysis of the distribution system, this system is modeled in detail while the transmission network is simplified as a power supply source.  \newline\newline
+The power system is changing: 1) more renewable energy is entering the grid at distribution level, 2) we see an increase of demand-side participation as a mechanism to balance frequency, and 3) we see an increase of electricity consumption\todo{source}. The changing environment requires a more detailed analysis of the electricity network and a more complex model of the interaction between the networks. Integrated transmission-distribution network models study the interaction that these networks have on each other. But it is not straight-forward to integrate these separate domains. The networks have different characteristics what has resulted in different network models that cannot be easily integrated. The most important difference is that the transmission network is a balanced network: Power is generated in three phases but voltage and current of other phases have the same magnitude and are equally shifted in phase by $2/3\pi$ rad. Therefore, the transmission network is modeled in single-phase while the distribution network is in general not balanced and thus modeled in three-phase \todo{source}. 
+Furthermore, the different characteristics have lead to the development of different algorithms to solve the power flow problem of different systems. The power flow problem is a nonlinear problem which is solved using iterative methods. Well-known algorithms to solve transmission systems are: Gauss-Seidel, Newton-Raphson, Decoupled loadflow, and DC loadflow \cite{Schavemaker2008chap6}. These solvers have been adapted to distribution solvers, among which the most well-known are: Newton-Raphson current mismatch \cite{Garcia2000}\cite{Abdel-akher2005}, implicit $Z_{bus}$ \cite{Teng2002a}\cite{Chen1991a}, BIBC/BCBV \cite{Teng2008}\cite{Farag2011}, and Forward/Backward Sweep \cite{Moghaddas2009}\cite{Eminoglu2008} methods. Besides the technical complexity of integrating network models, we have the issue of confidentiality. System operators, the instances responsible for safe operation of their electricity grid,  are not willing or not allowed to share network information with other system operators\todo{source}. One can reason that the ongoing energy transition and electrification is going to push the limits of conventional models until they do not suffice anymore.  It is probable that legislation and current behaviour will then follow the necessary change towards the use of integrated network models. 
+\newline\newline 
+The study of integrated network models is an emerging field. A literature review shows that multiple approaches exist that can roughly be categorized into 1) co-simulation frameworks that combine multiple domains that can be studied using different \textit{formats} and 2) stand-alone analysis frameworks that study integrated network models using the same \textit{software tools} \cite{https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=8585926}. Co-simulation frameworks are modular and well-suited for HPC architectures which make them ideal for simultaneous analysis of large transmission and distribution networks (100s to 1000s of buses) \cite{https://www.nrel.gov/docs/fy16osti/65550.pdf}. Stand-alone frameworks have been depreciated by the co-simulation community because of the high costs of simulation \cite{https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=8585926}. While efficiently integrated stand-alone models require significantly less communication and should therefore be compatible with co-simulation techniques. Literature shows that studies focusing on stand-alone models have \textit{thus far} resulted in the creation of different modeling techniques. These techniques have been tested on small-size transmission and distribution networks in order to check their feasibility \cite{Taranto2008}\cite{Sun2015}. In this work, we give an insight in the performance of the stand-alone methods and their ability to be efficiently scaled to large-size networks: We compare the existing stand-alone methods on convergence and CPU-time by applying them on several transmission-distribution networks. The contributions of this work can be summarized as follows: 
+\begin{itemize}
+    \item An extensive description of existing stand-alone methods that have been categorized according their modeling and integration approach. Network models can be divided into hybrid and homogeneous network models. A homogeneous network model is a three-phase representation of both the transmission and distribution network. A hybrid network model consists of a single-phase transmission and a three-phase distribution network. Stand-alone integration approaches can be classified as a unified \cite{Taranto2008} or as a splitting method \cite{Sun2005}. The unified method  solves the integrated system as a whole. The splitting method is similar to the co-simulation approach where the separate domains are solved on its own and coupled using an iterative approach;
+    \item A comparison of these methods using Matlab \todo{source} in which several test-cases are created to simulate the convergence behavior, where special attention is paid to CPU-time and number of iterations;
+    \item An analysis of convergence characteristics under varying circumstances such as a high level of distributed generation and the integration of multiple distribution networks into one transmission-network;
+    \item An insight into how these methods should adapt according to HPC applications in order to solve realistically sized networks (up to 1000000s buses). 
+\end{itemize}
+
+
+% Integrated networks can be modeled as homogeneous and as hybrid networks. A homogeneous network model is a three-phase representation of both the transmission and distribution network. A hybrid network model consists of a single-phase transmission and a three-phase distribution network. Several numerical methods have been developed to solve integrated networks. They can be classified as a unified \cite{Taranto2008} or as a splitting method \cite{Sun2005}.  The unified methods solve the integrated system as a whole. The splitting method divides the networks into a manager and a fellow and defines an extra iterative scheme between them. At every iteration, the separated systems are solved on its own. The integrated system is solved once convergence on the boundary between the systems have been reached. This article reviews the proposed integration methods and analyzes them by running simulations on small test-cases. We pay special attention to their convergence behaviour: CPU-time and the number of iterations. 
 
 
 \section{Characterization of the power flow problem}
@@ -745,25 +754,28 @@ The specified current ${I_s}$ and computed current ${I}\left({V}\right)$ are cal
     {I_{s,i}} = \left(\frac{\overline{S_s}}{V}\right)_i\quad\mbox{and}\quad I(V)_i = \mathbf{Y}V_i 
 \end{align}
 The Jacobian is formed by taking the derivative of the real and imaginary current mismatch with respect to the real and imaginary voltage.
-\subsection{Modeling elements in three-phase configuration}\hl{Voeg hier een opmerking toe dat ene noads elements zijn, andere series elements. dat we total Ybus matrix moeten bepalen en daar series elementen belangrijk zijn.}
-Loads, shunts, and transformers in three-phase networks are placed in a Wye or Delta configuration. Other elements that we have not seen so far in transmission networks are regulators. Regulators are placed along the distribution feeder to regulate the voltage distribution. 
+\subsection{Modeling elements in three-phase configuration}
+An electricity network models consists of nodal and series elements. Loads, generators, and shunts are nodal elements and are taken into account in the complex power vector $\mathbf{S}$. Transformers, line elements, and regulators are placed in series. They are accounted for in the $Y_{bus}$ matrix. Regulators are elements that are placed alone the distribution feeder to regulate the voltage profile of the feeder.  
 \subsubsection{Loads and shunts}
-Loads are modeled as buses where active and reactive power ($P$ and $Q$) are specified. They are modeled as a function of the voltage in which the load-model type (constant power/current/impedance) determines the relation between power and voltage:  
+Loads are modeled as buses where active and reactive power ($P$ and $Q$) are specified. They are modeled as a function of the voltage in which the load-model type determines the relation between power and voltage. Three types exist: the constant power (P), constant current (I), and constant impedance model (Z). Together called: ZIP-load models.    
 \begin{enumerate}
     \item Constant Power models (P): power is independent of the change in voltage magnitude, which is expressed as: $$
     \frac{P}{P_0} =1 \quad\mbox{and}\quad \frac{Q}{Q_0}=1
     $$
+    Constant power loads draw the same power from its source even if the source changes voltage.
     \item Constant Current models (I): power is related to the voltage magnitude as: $$
         \frac{P}{P_0} =\frac{|V|}{|V_0|} \quad\mbox{and}\quad \frac{Q}{Q_0}=\frac{|V|}{|V_0|}
     $$
-    \hl{quote: A constant current load is one which varies its internal resistance to achieve a constant current regardless of the voltage which is being fed to it and therefore the power will vary. In other words, a constant current load would draw approx the same amount of current, despite wide variations in the source voltage or other impedances in the circuit.}
+    A constant current load varies its internal resistance according to the voltage which is being fed to it in order to achieve a constant current despite fluctuations in the source voltage.  
+    % \hl{quote: A constant current load is one which varies its internal resistance to achieve a constant current regardless of the voltage which is being fed to it and therefore the power will vary. In other words, a constant current load would draw approx the same amount of current, despite wide variations in the source voltage or other impedances in the circuit.}
     \item Constant Impedance models (Z): power is related to the square of the voltage magnitude: $$
         \frac{P}{P_0} =(\frac{|V|}{|V_0|})^2 \quad\mbox{and}\quad \frac{Q}{Q_0}=(\frac{|V|}{|V_0|})^2
     $$
+    A constant impedance load presents the same impedance even when voltage is fluctuating. 
 \end{enumerate}
 \hl{The $|V_0|$ is the nominal voltage magnitude. In p.u. calculations, this is equal to 1. }\\ 
-Loads are physically connected in a grounded Wye or ungrounded Delta configuration. In the grounded Wye configuration all the three phases are connected to a single neutral point. These neutral point is connected to the ground by a fourth wire: the neutral conductor. The voltage is specified line-to-neutral.
-In an ungrounded Delta configuration the loads are connected phase-to-phase without a neutral conductor. Here, the voltage is specified phase-to-phase, also called line-to-line. The line-to-line voltages of a three-phase Delta-configuration are: $V^{ab}$, $V^{bc}$, and $V^{ca}$.  The line-to-line voltages and line-to-neutral voltages ($V^a$, $V^b$, and $V^c$) in this configuration are related as follows:
+Loads are physically connected in a grounded Wye or ungrounded Delta configuration. In the grounded Wye configuration all the three phases are connected to a single neutral point. This neutral point is connected to the ground by a fourth wire: the neutral conductor. The voltage is specified line-to-neutral.
+In an ungrounded Delta configuration the loads are connected phase-to-phase without a neutral conductor. Here, the voltage is specified phase-to-phase, also called line-to-line. The line-to-line voltages of a three-phase Delta-configuration are: $V^{ab}$, $V^{bc}$, and $V^{ca}$.  The line-to-line voltages and line-to-neutral voltages ($V^a$, $V^b$, and $V^c$) are related as follows:
 \begin{align}
     V^{ab} = V^a - V^b,\\ 
     V^{bc} = V^b - V^c,\\ 
@@ -838,11 +850,11 @@ For phases $a$, $b$, and $c$ this means that for each load bus $i$ the active an
     (P^c_0 +\iota Q^c_0)(|V^c|^2)
     \end{bmatrix}_i 
 \end{align}
-We solve the three-phase distribution systems with the NR-TCIM method, which implies that we need the specified currents $I_s$ in our mismatch equation \hl{(add reference to equation)} instead of specified powers. As currents are never measured in a power system, they are conducted from the specified power according the relationship: 
+We solve the three-phase distribution systems with the NR-TCIM method, which implies that we need the specified currents $I_s$ in our mismatch equation (eq: \ref{eq:curmism}) instead of specified powers. As currents are never measured in a power system, they are conducted from the specified power according the relationship: 
 \begin{equation}
     S=VI^*\ \Leftrightarrow\ I = (\frac{S}{V})^*
 \end{equation}
-If we divide the expressions of the loads $S$ by $V$ and take the conjugate of this new relation we get the expression for the specified currents:
+If we divide the expressions of the loads $S$ by $V$ and take the conjugate of this new relation we get the load models expressions in terms of specified current:
 \subparagraph{Wye - P }
 \begin{equation}
     I := (\frac{S}{V})^* = (\frac{P_0+\iota Q_0}{V})^*
@@ -893,7 +905,7 @@ Or in three-phase matrix:
     \end{bmatrix}_i 
     \end{align}
 \paragraph{Delta loads}
-Delta loads are expressed by line-to-line voltages and currents while we need line-to-neutral currents for our calculations. We express the line-to-neutral currents directly for the three load models using \begin{align}
+Delta loads are expressed by line-to-line voltages and currents while we need line-to-neutral currents in our calculations. We express the line-to-neutral currents directly for the three load models using \begin{align}
     I^a=I^{ab}-I^{ca},\\
     I^b=I^{bc}-I^{ab},\\
     I^c=I^{ca}-I^{bc}.
@@ -987,21 +999,21 @@ P   &&  $ \begin{bmatrix}
 \end{tabular}
 \end{adjustbox}
 \end{table}
-\hl{Note: update Jacobian according new load models}
+
 
 \subsubsection{Transformers}
-Transformers are placed between two networks that have different voltage levels. The primary side ($p$) of the transformer is connected to the higher voltage network and the secondary side ($s$) is connected to the voltage level. The transformer in a power system is represented by two blocks:
+Transformers are placed between two networks that have different voltage levels. The primary side ($p$) of the transformer is connected to the higher voltage network and the secondary side ($s$) is connected to the lower voltage level. The transformer in a power system is represented by two blocks:
 \begin{itemize}
     \item An admittance matrix block, $Y^{abc}_T$, consisting of per-unit leakage admittance $y_t$, and  
     \item A shunt block that models core losses. The shunt block can be represented by voltage dependent loads and follow the representation in Tab. \ref{tab:ZIPmodels}. 
 \end{itemize}
-The admittance matrix block is given in a similar manner as the $Y_{bus}$ matrix of a distribution cable, now consisting of leakage admittance of the transformer: \begin{equation}
+The admittance matrix block is given in a similar manner as the $Y_{bus}$ matrix of a distribution cable, but now consisting of leakage admittance of the transformer: \begin{equation}
     Y^{abc}_T = \begin{bmatrix}
     Y_{pp}^{abc} & Y^{abc}_{ps} \\
      Y_{sp}^{abc} & Y^{abc}_{ss}
     \end{bmatrix}.
 \end{equation}
-Each block $Y^{abc}_{ij}$, $i,\ j\in\{p,s\}$ has a different configuration. This configuration depends on the connection of the transformer and is either one of the three following blocks: \begin{equation}\resizebox{0.91\columnwidth}{!}{%
+Each block $Y^{abc}_{ij}$, $i,j\in\{p,s\}$ has a different configuration. This configuration depends on the connection of the transformer and is either one of the three following blocks: \begin{equation}\resizebox{0.91\columnwidth}{!}{%
 $
     Y_1=\begin{bmatrix}
     y_t & 0 & 0 \\
@@ -1018,13 +1030,13 @@ $
     \end{bmatrix}. $%
     }
 \end{equation}
-Tab. represents the corresponding block per transformer configuration. \\
-The pu leakage admittance $y_t$ consists of resistance $r$ and reactance $x$ of the transformer and should \hl{be corrected for the correct base grounds}, resulting in: 
+Tab. \ref{tab:trafoblocks} represents the corresponding block per transformer configuration. \\
+The pu leakage admittance $y_t$ consists of resistance $r$ and reactance $x$.  The equations should be scaled according the correct base quantities in order to match the different pu-systems. The pu leakage admittance results in: 
 \begin{equation}
-    y_t = \frac{1}{z_t},\quad\mbox{where } z_t = (r+\iota x)(\frac{V_{low}}{V_{base}})^2\frac{S_{base}}{VA},
+    y_t = \frac{1}{z_t},\quad\mbox{where } z_t = (r+\iota x)(\frac{V_{low}}{V_{base}})^2\frac{S_{base}}{S_t},
 \end{equation}
-\hl{where $r$ and $x$ are given in percentages, $V_{low}$ is the voltage at the secondary level of the transformer, and $VA$ is volt-ampere, the unity of apparent power, of the transformer.  }
-Several transformer connections exist, which define the choice of the four blocks of the admittance matrix $Y_T^{abc}$. The correct blocks are described in Tab. \ref{tab:trafoblocks}. 
+where $r$ and $x$ are given in fractions. $V_{low}$ is the voltage at the secondary level of the transformer, and $S_T$ is apparent power of the transformer, expressed in volt-ampere. $V_{base}$ is always given in line-to-line and should be converted to line-to-neutral by dividing it by $\sqrt{3}$, in order to match the calculations. 
+% Several transformer connections exist, which define the choice of the four blocks of the admittance matrix $Y_T^{abc}$. The correct blocks are described in Tab. \ref{tab:trafoblocks}. 
 
  \begin{table}[h]
 \renewcommand{\arraystretch}{1.1}
@@ -1053,37 +1065,38 @@ Delta & Delta && $Y_2$ & $-Y_2$ & $-Y_2$ & $Y_2$\\
 \end{table}
 
 \subsubsection{Step-Voltage Regulators}
-Step-Voltage Regulators (SVRs) are installed along distribution feeders, often after the substation, but also at other locations, to control the voltage along the feeder and to keep it within an acceptable range.  \\
-In short, the SVR is an automatic transformer that can change its tap ratio. The tap ratio of a transformer is responsible for the voltage level at the secondary side of a transformer, the output voltage. In a SVR, this voltage is measured; if it falls outside the safety range, the tap ratio changes to a different position to adjust the output voltage. This continues until the voltage is within acceptable limits.
-In our load-flow  computations, we are not implementing a SVR that changes its tap ratio automatically. We pre-determine the `safe' tap-ratios based on output data of openDSS. With these data we model the SVR directly. \newline
-A SVR is modeled as a block that is placed between any connected pair of buses ($n$,$m$). The  voltages and currents of the primary (bus $n$) and secondary side (bus $m$) of the SVR are related via matrices:  $A_V$, $A_I$, and $Z_R\in\mathbb{C}^{6x6}$. The first one represents voltage gain, the second current gain, and the last impedance. $A_I$ and $A_V$ consists of effective regulator ratio $a_R$ and $Z_R$ consists of pu series impedance $z_R$ of the SVR. Having determined the tap-ratio, $a_R$ is:
+Step-Voltage Regulators (SVRs) are installed along distribution feeders, often after the substation, but also at other locations, to control the voltage along the feeder and to keep it within an acceptable range \footnote{
+In short, the SVR is a sequence of automatic transformers that can change their tap ratio. The tap ratio of a transformer is responsible for the voltage level at the secondary side of a transformer, the output voltage. In a SVR, this voltage is measured; if it falls outside the safety range, the tap ratio changes to a different position to adjust the output voltage. This continues until the voltage is within acceptable limits.
+In our load-flow  computations, we are not implementing a SVR that changes its tap ratio automatically. We pre-determine the `safe' tap-ratios based on output data of openDSS. With these data we model the SVR directly}. \\
+A SVR is modeled as a series block that is placed between any connected pair of buses ($n$,$m$). The  voltages and currents of the primary (bus $n$) and secondary side (bus $m$) of the SVR are related via matrices:  $A_V$, $A_I$, and $Z_R\in\mathbb{C}^{6x6}$. The first one represents voltage gain, the second current gain, and the last impedance. $A_I$ and $A_V$ consists of effective regulator ratio $a_R$ and $Z_R$ consists of pu series impedance $z_R$ of the SVR. $a_R$ is expressed as:
 \begin{equation}
-    a_R = 1\mp 0.000625tap. 
-\end{equation}Three-phase SVRs are commonly configured as Wye, closed-delta, and open-delta. Just like transformers, these configurations determine the entities of the three blocks $A_I$, $A_V$, and $Z_R$. It holds that:  \begin{equation}
+    a_R = 1\mp 0.000625tap, 
+\end{equation} where \textit{tap} is the tap-ratio of the SVR, that needs be determined upfront. 
+Three-phase SVRs are commonly configured as Wye, closed-delta, and open-delta connections. Just like transformers, these configurations determine the entities of the three blocks $A_I$, $A_V$, and $Z_R$. Furthermore, it holds that:  \begin{equation}
     A_V^-{-1}=A_I^T.
 \end{equation}
-With these three blocks we form the SVR-admittance matrix, $Y^{abc}_{R}$, that can be incorporated in the final nodal admittance matrix of the feeder, $Y_{bus}$. \hl{Say this also in transformer section}. 
-The admittance matrix $Y^{abc}_R$ looks as follows:
+These three blocks form the SVR-admittance matrix, $Y^{abc}_{R}$. The admittance matrix $Y^{abc}_R$ looks as follows:
 \begin{equation}Y^{abc}_{R}=
 \begin{bmatrix}
-A_I F_R^{-1}Y^{abc}_{nn}A_I^T & -A_I F_R^{-1}Y^{abc}_{nm} \\ 
+A_I F_R^{-1}Y^{abc}_{nn}A_I^T & -A_I F_R^{-1}Y^{abc}_{nm} \\[7pt]
 -Y^{abc}_{mn}F_R^{-T}A_I^T & Y^{abc}_{mm}-Y^{abc}_{mn} A_I^TZ_RA_IF_R^{-1}Y^{abc}_{nm} 
 \end{bmatrix}
 \end{equation}
-$Y^{abc}_{ij},\ i,j\in\{n,m\}$ consists of the admittance matrix of the distribution line along which the regulator is placed and $F_R$ and $F_R^{-T}$ are defined as follows: 
+$Y^{abc}_{ij},\ i,j\in\{n,m\}$ is the admittance of the distribution line along which the regulator is placed. $F_R$ and $F_R^{-T}$ are defined as follows: 
 \begin{align}
-    F_R &= \mathbf{I}_{3\times 3}+Y^{abc}_{nn}A_I^TZ_RA_I,\\
+    F_R &= \mathbf{I}_{3\times 3}+Y^{abc}_{nn}A_I^TZ_RA_I,\\[3pt]
     F_R^{-T} &= \mathbf{I}_{3\times 3} - A_I^T Z_R A_I F_R^{-1}Y_{nn}^{abc}. 
 \end{align}
-If the auto-transformer of the SVR is ideal, it means that the tap-ratio is equal to $0$ and that the impedance matrix is $0$, $Z_R=0$. This results into $F_R$ being the identity matrix: $\mathbf{I}_{3\times 3}$. The admittance matrix of an ideal SVR becomes the following:
+\paragraph{Ideal SVRs}
+If the auto-transformer of the SVR is ideal, the tap-ratio is equal to $0$ and the impedance matrix $Z_R$ is equal $0$. This results into $F_R$ being the identity matrix: $\mathbf{I}_{3\times 3}$. The admittance matrix of an ideal SVR becomes the following:
 \begin{equation}
     Y^{abc}_{R,ideal}
 = \begin{bmatrix}
-A_I Y^{abc}_{nn}A_I^T & -A_I  Y^{abc}_{nm} \\ 
+A_I Y^{abc}_{nn}A_I^T & -A_I  Y^{abc}_{nm} \\[5pt]
 -Y^{abc}_{mn}A_I^T & Y^{abc}_{mm}
 \end{bmatrix}.
 \end{equation}
-We refer to paper \cite{} on how to derive the blocks $A_I$, $A_V$, and $Z_R$. We list the entities of these blocks, per SVR configuration, in Tab. \ref{tab:svrent}.
+We refer to paper \todo{source} on how to derive the blocks $A_I$, $A_V$, and $Z_R$. We list the entities of these blocks, per SVR configuration, in Tab. \ref{tab:svrent}.
  \begin{table}[h]
 \renewcommand{\arraystretch}{1.1}
 \centering
@@ -1140,8 +1153,16 @@ Z_{R_{ab}} & 0 & 0 \\
 \end{table}
 
 \section{Integrating transmission and distribution networks}
-Transmission networks and distribution networks are connected to each other via a substation. In separate network models, this substation is modeled as a single-bus containing the information of the other system. In transmission network models, this substation is modeled as a load bus. In distribution network models, the substation is modeled as the slack bus. The total load in the transmission model is equal to the total generated power of the slack bus in the distribution model. The difference of the substation as load bus, is that the parameters $S$ and $V$ are modeled as single-phase quantities, while in the distribution model as three-phase quantities. Figure \ref{fig:boundary} shows this information mismatch. Table \ref{tab:substationbus} shows the single-phase and three-phase representation of $S$, $V$ and $Y$ in the network models. 
-\begin{figure}
+We have a single-phase transmission system described by the following power flow relation: 
+ \begin{equation}\label{eq:SVIa}
+   S_i^a=V_i^a\overline{I^a_i}=V_i^a\sum_{k=1}^N\overline{Y^a_{ik}}\overline{V^a_k}     ,
+\end{equation}
+and a three-phase distribution system, described by the following power flow relation:
+\begin{equation}\label{eq:SVIp}
+    S_i^p=V_i^p\overline{I^p_i}=V_i^p\sum_{k=1}^N\sum_{q=a,b,c}\overline{Y^{pq}_{ik}}\overline{V^q_k},\quad p\in\{a,b,c\}.
+\end{equation}
+These two networks are connected to each other via a substation. A dimension mismatch takes place at this substation, depicted in figure \ref{fig:boundary}. Table \ref{tab:substationbus} shows the single-phase and three-phase representation of $S$, $V$ and $Y$ in the network models. 
+\begin{figure}[b]
     \centering
     \includegraphics[width=0.75\textwidth]{koppel2.eps}
     \caption{Information mismatch at the substation between a transmission and distribution network}
@@ -1168,7 +1189,7 @@ $Y_{ij}$ &&& $\begin{bmatrix}
 \end{tabular}
 \end{table}
 We need integration methods to resolve this mismatch at the substation and solve the power flow problem on the integrated network. We conducted a literature study to investigate which numerical methods exist to solve this problem. \\ \\ 
-The literature suggests two approaches to run computations on integrated networks: a unified and a splitting approach, and it suggests two ways of modeling integrated networks: as a homogeneous or as a hybrid network. Two integrated three-phase networks form a homogeneous network\footnote{two single-phase networks can also make a homogeneous network, but we regard only unbalanced three-phase distribution networks.}: both the transmission and distribution network are modeled in three phases. A hybrid network consists of a single-phase transmission network and a three-phase distribution network. The unified methods first integrates the two network into one system and then solves the entire system at once. This has the advantage that it requires only one iterative process to solve the system, but also implies that the system has to be solved with either NR-power or NR-TCIM\footnote{In het geval van dit paper dan}, being disadvantageous for a part of the system. The splitting approach appoints the transmission network as the master and the distribution network as the slave. It iterates between the two networks and at each iteration, it solves the networks separately. The master-slave splitting uses an extra iterative scheme besides the transmission and distribution schemes, but this has the advantage that the separate systems can be solved with the preferred Newton-Raphson algorithm. We call the unified approach applied to homogeneous networks the full three-phase (F3P) method and applied to hybrid networks the interconnected (IC) method. We call all splitting methods Master-Slave splitting (MSS) methods, as described in the literature \cite{Sun2008}, and define them based on their option, eg: the splitting approach applied to hybrid networks is called the MSS-hybrid method. Figure \ref{fig:algorithms} gives an overview of the methods. 
+The literature suggests two approaches to run computations on integrated networks: a unified and a splitting approach, and it suggests two ways of modeling integrated networks: as a homogeneous or as a hybrid network. Two integrated three-phase networks form a homogeneous network\footnote{two single-phase networks can also make a homogeneous network, but we regard only unbalanced three-phase distribution networks.}: both the transmission and distribution network are modeled in three phases. A hybrid network consists of a single-phase transmission network and a three-phase distribution network. The unified methods first integrates the two network into one system and then solves the entire system at once. The splitting approach appoints the transmission network as the manager and the distribution network as the fellow. It iterates between the two networks and at each iteration, it solves the networks separately. We call the unified approach applied to homogeneous networks the full three-phase (F3P) method and applied to hybrid networks the interconnected (IC) method. We call all splitting methods manager-fellow splitting (MFS) methods. They are described in the literature  as Master-Slave splitting methods\cite{Sun2008}, but we change the naming convention. We define the MFS-methods based on the network model they are applied to, eg: the splitting approach applied to hybrid networks is called the MFS-hybrid method. Figure \ref{fig:algorithms} gives an overview of the methods. 
 % Set the overall layout of the tree
 \tikzstyle{level 1}=[level distance=2.5cm, sibling distance=2.5cm]
 \tikzstyle{level 2}=[level distance=2.5cm, sibling distance=2cm]
@@ -1200,17 +1221,17 @@ The literature suggests two approaches to run computations on integrated network
             node[below]  {}
     }
     child {
-        node[bag] {Master-slave}        
+        node[bag] {Manager-Fellow}        
         child {
                 node[end, label=right:
-                    {Homogeneous $\Rightarrow$ \textbf{MSS-homo} }] {}
+                    {Homogeneous $\Rightarrow$ \textbf{MFS-homo} }] {}
                 edge from parent
                 node[above] {}
                 node[below]  {}
             }
             child {
                 node[end, label=right:
-                    {Hybrid $\Rightarrow$ \textbf{MSS-hybrid}}] {}
+                    {Hybrid $\Rightarrow$ \textbf{MFS-hybrid}}] {}
                 edge from parent
                 node[above] {}
                 node[below]  {}
@@ -1225,17 +1246,12 @@ The literature suggests two approaches to run computations on integrated network
 \end{figure}
 
 \subsection{Unified methods}
-\noindent Unified methods solve the integrated system using one iterative scheme applied to the entire integrated network. Both the separate network models include the substation in their system. The integrated network is created by converting this substation to two buses connected via a transformer. Figure \ref{fig:subtrans} clarifies this idea. This transformer is modeled as a distribution cable with the same admittance $\mathbf{Y}_{ij}$ as the first cable in the distribution network. The bus at the transmission side of the transformer is modeled as a load bus, just as in the original network. The bus at the distribution side of the transformer is modeled as generator bus. This bus is the former slack bus of the distribution network, but as only one reference bus is allowed per system, it is changed to a generator bus. Unified methods require us to choose one algorithm to solve the entire network. We will compare both NR-power and NR-TCIM to solve the system. \begin{figure}[h]
-    \centering
-    \includegraphics[width=0.8\textwidth]{Images/substationtransformer.eps}
-    \caption{The original substation replaced by two buses k and m which are connected by a transformer.}
-    \label{fig:subtrans}
-\end{figure}
+\noindent Unified methods solve the integrated system using one iterative scheme applied to the entire integrated network. The substation is modeled as a transformer that connects the two networks. The original slack bus of the distribution network becomes a load bus that is connected to the righthandside of the substation. Any load bus of the transmission network can be connected to the lefthandside of the substation. This load bus remains a load bus. We need to solve the entire system using one algorithm. 
 \subsubsection{{The full three-phase method}}
 \label{sect:f3p}
-The full three-phase method is the unified method applied on homogeneous networks and a homogeneous network consists of two three-phase networks. Unbalanced distribution networks are by default modeled in three-phase, the transmission networks requires a transformation. This transformation is based on the assumption that the transmission system is balanced: we deduct the phases $b$ and $c$ from the first phase $a$ and we transform  the voltage $V_a$, the power $S_a$, and the admittance $Y_a$ of all the buses $i=1,...,N$ to their three-phase equivalents. We transform all the buses $i=1,..,N$ in the transmission system using transformer matrices:
+The full three-phase method is the unified method applied on homogeneous networks and a homogeneous network consists of two three-phase networks. Unbalanced distribution networks are by default modeled in three-phase, the transmission networks requires a transformation. This transformation is based on the assumption that the transmission system is balanced: we deduct the phases $b$ and $c$ from the first phase $a$ and we transform  the voltage $V_a$, the complex power $S_a$, and the admittance $Y_a$ of all the buses $i=1,...,N$ to their three-phase equivalents. We transform all the buses $i=1,..,N$ in the transmission system using transformer matrices:
 \begin{align}
-    \mathbf{T_1}=\begin{bmatrix}1 & a & a^2\end{bmatrix}^T\quad\mbox{ and}\quad \mathbf{T_2}=\begin{bmatrix}1  & 1 & 1\end{bmatrix}^T,\quad a=e^{\frac{2}{3}\pi\iota},\nonumber
+    \mathbf{T_1}=\begin{bmatrix}1 & a^2 & a\end{bmatrix}^T\quad\mbox{ and}\quad \mathbf{T_2}=\begin{bmatrix}1  & 1 & 1\end{bmatrix}^T,\quad a=e^{\frac{2}{3}\pi\iota},\nonumber
     \end{align} 
     and identity matrix $\mathbf{I}_{3\times 3}$. 
 This results into the following:
@@ -1255,11 +1271,17 @@ This results into the following:
 
 
 \subsubsection{{The interconnected method}}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Images/substationtransformer.eps}
+    \caption{The substation transformer in a hybrid network connecting single-phase bus $k$ and three-phase bus $m$.}
+    \label{fig:subtrans}
+\end{figure}
 \label{sect:ic}
-The interconnected method is the unified method applied to hybrid networks. A hybrid network consists of a single-phase transmission part and a three-phase distribution part. The transformer in between load bus $k$ of the transmission network and the generator bus $m$ of the distribution network connects the information between the two networks. It couples the single-phase quantities at the transmission side to the three-phase quantities at distribution side by transforming the nodal admittance matrix $\mathbf{Y}_{km}$. We use three transformer matrices  \begin{equation}
-    \mathbf{T_1}, \quad \mathbf{T_3}  = \frac{1}{3}[1\ a\ a^2],\quad\mbox{and}\quad\mathbf{T_4}= \frac{1}{3}\left[1 \ 1 \ 1 \right],\quad a = e^{\frac{2}{3}\pi\iota},
+The interconnected method is the unified method applied to hybrid networks. A hybrid network consists of a single-phase transmission part and a three-phase distribution part. The substation transformer, between load bus $k$ of the transmission network and the original slack bus $m$ of the distribution network, connects the information between the two networks. It couples the single-phase quantities at the transmission side to the three-phase quantities at distribution side by transforming the nodal admittance matrix $\mathbf{Y}_{km}$. This is depicted in figure \ref{fig:subtrans}. We use three transformer matrices  \begin{equation}
+    \mathbf{T_1}, \quad \mathbf{T_3}  = \frac{1}{3}[1\ a\ a^2],\quad \mathbf{T_4}= \frac{1}{3}\left[1 \ 1 \ 1 \right],\quad\mbox{and}\quad \mathbf{T_5}  =\frac{1}{3} \left[1 \ a^2\  a \right],\quad a = e^{\frac{2}{3}\pi\iota},
    \label{eq:T1T2}\nonumber  %= [1\ a^2\ a]^T
-\end{equation} to establish the connection of bus $k$ and $m$ via the admittance matrix $\mathbf{Y}_{km}$. This transformation is based on the assumption that the connecting bus $k$ is balanced. This means that:
+\end{equation} to establish the connection of bus $k$ and $m$ via the admittance matrix $\mathbf{Y}_{km}$. This transformation is based on the assumption that the connecting bus $k$ is perfectly balanced. This means that the single-phase and three-phase quantities are related as the following:
 \begin{align}
     \begin{bmatrix}V_a & V_b & V_c\end{bmatrix}^T_k &= \mathbf{T_1}\begin{bmatrix}V_a\end{bmatrix}_k,    \label{eq:VA+}
 \\
@@ -1267,6 +1289,7 @@ The interconnected method is the unified method applied to hybrid networks. A hy
     \label{eq:IA+}\\
      \begin{bmatrix}S_a\end{bmatrix}_k &= \mathbf{T_4}\begin{bmatrix}S_a & S_b & S_c \end{bmatrix}^T_k.\label{eq:SA+}
 \end{align}
+The change of the transformer substation depends on whether the unified system is solved using NR-Power or NR-TCIM. The relations \eqref{eq:VA+}, \eqref{eq:IA+}, and \eqref{eq:SA+} are substituted in the corresponding power flow equations. 
 \paragraph{Using current injections}
 The NR-TCIM method uses Ohm's law directly. The relation between node $k$ and $m$ is expressed as follows:
 \begin{align}
@@ -1286,7 +1309,11 @@ If node $k$ and $m$ we're both modeled in three-phase, we know the following:
    {I}_k^{abc}&=\mathbf{Y}^{abc}_{11}{V}_k^{abc}+\mathbf{Y}_{12}^{abc}{V}_m^{abc},\label{eq:IkYV}\\
    {I}_m^{abc}&=\mathbf{Y}^{abc}_{21}{V}_k^{abc}+\mathbf{Y}_{22}^{abc}{V}_m^{abc}.\label{eq:ImYV}
 \end{align}
-Replacing $\mathbf{V}_k^{abc}$ by $\mathbf{T_1}\begin{bmatrix}V_a\end{bmatrix}_k  $ (equation \ref{eq:VA+}) and multiplying \eqref{eq:ImYV} with $\mathbf{T_3}$ to obtain $\begin{bmatrix}I_a\end{bmatrix}_k $ (equation \eqref{eq:IA+}) results in: 
+We now multiply equation \eqref{eq:IkYV} by $\mathbf{T_3}$ to obtain $I^a_k$: 
+\begin{align}
+  I_k^{a} = \mathbf{T_3} \mathbf{I}_k^{abc}&=\mathbf{T_3}\mathbf{Y}^{abc}_{11}{V}_k^{abc}+\mathbf{T_3}\mathbf{Y}_{12}^{abc}\mathbf{V}_m^{abc}.\label{eq:IkTYV}
+  \end{align}
+We then substitute $\mathbf{V}_k^{abc}$ in equations \eqref{eq:IkTYV} and \eqref{eq:ImYV} by $\mathbf{T_1}V^a_k$ (equation \ref{eq:VA+}): 
 \begin{align}
   I_k^{a} = \mathbf{T_3} \mathbf{I}_k^{abc}&=\mathbf{T_3}\mathbf{Y}^{abc}_{11}\mathbf{T_1}V_k^{a}+\mathbf{T_3}\mathbf{Y}_{12}^{abc}\mathbf{V}_m^{abc},\label{eq:IkYVT}\\
     \mathbf{I}_m^{abc}&=\mathbf{Y}^{abc}_{21}\mathbf{T_1}V_k^{a}+\mathbf{Y}_{22}^{abc}{V}_m^{abc}.\label{eq:ImYVT}
@@ -1297,12 +1324,12 @@ From \eqref{eq:IkYVT} and \eqref{eq:ImYVT} we see that our new nodal admittance 
 \begin{align}\mathbf{Y}_{km} =
 \kbordermatrix{
 & 1 & 3 \\
-   1 &  {\mathbf{T_3} [\mathbf{Y^{abc}}_{11}] \mathbf{T_1}} & {\mathbf{T_3} [\mathbf{Y}^{abc}_{12}]}  \\
+   1 &  {\mathbf{T_3} [\mathbf{Y}^{abc}_{11}] \mathbf{T_1}} & {\mathbf{T_3} [\mathbf{Y}^{abc}_{12}]}  \\
 3 & [\mathbf{Y}^{abc}_{21}]{\mathbf{T_1} } & {\mathbf{Y}^{abc}_{22}} 
   }_{km}
 \end{align}
 \paragraph{Using power injections}
-The NR-power methods uses power injections. The relation between node $k$ and $m$ is expressed as follows: 
+We can also start from the power equations. The relation between node $k$ and $m$ is expressed as follows: 
 \begin{align}
    {S}={V}{I^*}\quad\Leftrightarrow\quad\begin{bmatrix}
      S_{k} \\
@@ -1318,163 +1345,178 @@ The NR-power methods uses power injections. The relation between node $k$ and $m
 In the same manner as current injections, we can write this relation in three-phase: 
 \begin{align}
    {S}_k^{abc}&={V}_k^{abc}{I}_k^{abc*}+{V}_k^{abc}{I}_m^{abc*},\label{eq:SkYV}\\
-   {S}_m^{abc}&={V}_m^{abc}{I}_k^{abc*}+{V}_m^{abc}{I}_m^{abc*}.\label{eq:SmYV}
+   {S}_m^{abc}&={V}_m^{abc}{I}_k^{abc*}+{V}_m^{abc}{I}_m^{abc*}.\label{eq:SmYV} \\
+   & \Leftrightarrow \\ 
+      {S}_k^{abc}&=\mbox{diag}({V}_k^{abc})\cdot (\mathbf{Y}^{abc}_{kk}{V}_k^{abc})^* +\mbox{diag}({V}_k^{abc})\cdot (\mathbf{Y}^{abc}_{km}{V}_k^{abc})^*,\label{eq:SkYV}\\
+   {S}_m^{abc}&=\mbox{diag}({V}_m^{abc})\cdot (\mathbf{Y}^{abc}_{mk}{V}_k^{abc})^* +\mbox{diag}({V}_m^{abc})\cdot (\mathbf{Y}^{abc}_{mm}{V}_m^{abc})^*.\label{eq:SmYV} 
 \end{align}
-Multiplying the first line from the left by $\mathbf{T_4}$, replacing $V_k^{abc}$ and $I_k^{abc}$ using \eqref{eq:VA+} and \eqref{eq:IA+}, and substituting $I^* = (\mathbf{Y}V)^*$ we obtain:
+We multiply the first line from the left by $\mathbf{T_4}$ to obtain $S^a_k$: 
 \begin{align}
-    S_k^a = \mathbf{T_4} S^{abc}_k &= \mathbf{T_4}\mbox{diag}(\mathbf{T_1}V_k^a)\cdot \mathbf{Y}_{11}\mathbf{T_1}V_k^a + \mathbf{T_4}\mbox{diag}(\mathbf{T_1}V_k^a)\cdot \mathbf{Y}_{12}V_m^{abc}, \label{eq:STIChybk}\\ 
-        S^{abc}_m &=V_m^{abc} \mathbf{Y}_{21}\mathbf{T_1}V_k^a + V_m^{abc} \mathbf{Y}_{22}V_m^{abc}. \label{eq:STIChybm}
+    S_k^a =\mathbf{T_4} S^{abc}_k= \mathbf{T_4} \mbox{diag}({V}_k^{abc})\cdot (\mathbf{Y}^{abc}_{kk}{V}_k^{abc})^* + \mathbf{T_4}\mbox{diag}({V}_k^{abc})\cdot (\mathbf{Y}^{abc}_{km}{V}_m^{abc})^*. \label{eq:STTIChybk}
+    \end{align} 
+Then, we substitute $V_k^{abc}=\mathbf{T_1}V^a_k$ (equation  \eqref{eq:VA+}) in equations \eqref{eq:SmYV} and \eqref{eq:STTIChybk} and obtain the following:
+\begin{align}
+    S_k^a &= \mathbf{T_4}\mbox{diag}(\mathbf{T_1}V_k^a)\cdot (\mathbf{Y}_{kk}^{abc}\mathbf{T_1}V_k^a)^* + \mathbf{T_4}\mbox{diag}(\mathbf{T_1}V_k^a)\cdot (\mathbf{Y}_{km}^{abc}V_m^{abc})^*, \label{eq:STIChybk1}\\ 
+        S^{abc}_m &=\mbox{diag}(V_m^{abc})\cdot (\mathbf{Y}_{mk}^{abc}\mathbf{T_1}V_k^a)^* + \mbox{diag}(V_m^{abc})\cdot( \mathbf{Y}_{mm}^{abc}V_m^{abc})^*. \label{eq:STIChybm1}
 \end{align}
-We can rewrite the first part of the rhs of \eqref{eq:STIChybk} as:
+We can rewrite $\mathbf{T_4}\mbox{diag}(\mathbf{T_1}V_k^a)$, the first part of the rhs in \eqref{eq:STIChybk1}, as:
 \begin{align}
-    \mathbf{T_4}\mbox{diag}(\mathbf{T_1}V_k^a) &= \mathbf{T_4}\mbox{diag}(\mathbf{T_1})\mbox{diag}(V_k^a) \\
+    \mathbf{T_4}\mbox{diag}(\mathbf{T_1}V_k^a) &\Leftrightarrow \mathbf{T_4}\mbox{diag}(\mathbf{T_1})\mbox{diag}(V_k^a) \\
     &= \frac{1}{3}\begin{bmatrix} 1 & 1 & 1 \end{bmatrix}\begin{bmatrix} 1 &0 &0 \\ 
    0 & a^2 &0 \\ 
     0& 0& a \end{bmatrix}\mbox{diag}(V_k^a) \\
-    &=\underbrace{\frac{1}{3} \begin{bmatrix}1 & a^2 & a \end{bmatrix}}_{\mathbf{T_5}}\mbox{diag}(V_k^a) \\
+    &\Leftrightarrow\underbrace{\frac{1}{3} \begin{bmatrix}1 & a^2 & a \end{bmatrix}}_{\mathbf{T_5}}\mbox{diag}(V_k^a)\\ 
     &\Leftrightarrow \mbox{diag}(V_k^a) \mathbf{T_5}.\label{eq:VkT6}
 \end{align}
-Equations \eqref{eq:STIChybk}, \eqref{eq:STIChybm}, and \eqref{eq:VkT6} results in a new admittance matrix $\mathbf{Y}_{km}$: 
+This results in the following relations for single-phase and three-phase power: 
+\begin{align}
+    S_k^a &= \mbox{diag}(V_k^a)\cdot (\mathbf{T_5}\mathbf{Y}_{kk}^{abc}\mathbf{T_1}V_k^a)^* + \mbox{diag}(V_k^a)\cdot (\mathbf{T_5}\mathbf{Y}_{km}^{abc}V_m^{abc})^*, \label{eq:STIChybk}\\ 
+        S^{abc}_m &=\mbox{diag}(V_m^{abc})\cdot (\mathbf{Y}_{mk}^{abc}\mathbf{T_1}V_k^a)^* + \mbox{diag}(V_m^{abc})\cdot( \mathbf{Y}_{mm}^{abc}V_m^{abc})^*. \label{eq:STIChybm}
+\end{align}
+Equations \eqref{eq:STIChybk}, \eqref{eq:STIChybm} yield the following transformed admittance matrix $\mathbf{Y}_{km}$: 
 \begin{align}\mathbf{Y}_{km} =
 \kbordermatrix{
 & 1 & 3 \\
-   1 &  {\mathbf{T_5} [\mathbf{Y^{abc}}_{11}] \mathbf{T_1}} & {\mathbf{T_5} [\mathbf{Y}^{abc}_{12}]}  \\
-3 & [\mathbf{Y}^{abc}_{21}]{\mathbf{T_1} } & {\mathbf{Y}^{abc}_{22}} 
+   1 &  {\mathbf{T_5} [\mathbf{Y}^{abc}_{kk}] \mathbf{T_1}} & {\mathbf{T_5} [\mathbf{Y}^{abc}_{km}]}  \\
+3 & [\mathbf{Y}^{abc}_{mk}]{\mathbf{T_1} } & {\mathbf{Y}^{abc}_{mm}} 
   }_{km}
 \end{align}
-\subsection{Master-Slave splitting methods}
-In contrast to the unified methods, the MSS-methods keeps two separate domains, the transmission and distribution network (or the master and the slave), and introduces an extra iterative scheme between the domains. The two domains have one overlapping bus: the substation. In the unified methods, the substation is converted to two buses connected by an extra transformer. The MSS-methods keeps the substation as one bus, which they call the boundary bus $B$. As the two domains are solved separately, the boundary bus becomes the slack bus for the distribution system and a load bus for the transmission system. In one MSS-iteration, we solve the slave, injects the solution of the boundary bus into the master, and then solve the master. This iterative process continues until the difference between the boundary bus of the slave and the master is smaller than a certain tolerance value $\epsilon$.\todo{define $\epsilon$} As the boundary bus is the slack bus of the slave, it requires the voltage $V_B$ as known information. In the first iteration, we initialize the voltage as $V_B=1.0$ pu. In the following iterations, we take the voltage from the output of the master. The boundary bus is a load bus for the master and thus requires the complex power as known. We use the output from the slave $S_B$ as input for the master. Algorithm \ref{alg:mss} shows how the iterative scheme of the MSS-method works.     
+\subsection{Manager-Fellow splitting methods}
+In contrast to the unified methods, the MFS-methods keep two separate domains, the transmission and distribution network (or the manager and the fellow), and introduces an extra iterative scheme between the domains. The two domains have one overlapping bus: the boundary bus. The boundary bus is the original slack bus of the distribution system and, like the unified methods, can be any load bus of the transmission system. As the two domains are solved separately, the boundary bus remains the slack bus for the distribution system and the load bus for the transmission system. During one MFS-iteration, we solve the fellow, inject the solution of the boundary bus into the manager, and then solve this system. This iterative process continues until the difference between the boundary bus of the two systems is smaller than a certain tolerance value $\epsilon$. As the boundary bus is the slack bus of the distribution system, it requires the voltage $V_B$ as known information. In the first iteration, we initialize the voltage as $V_B=1.0$ pu. In the following iterations, we determine the voltage by solving the transmission system. The boundary bus is a load bus for the transmission system and thus requires the complex power as known. We use the output from the distribution system $S_B$ as input for the transmission system. Algorithm \ref{alg:MFS} shows how the iterative scheme of the MFS-method works.     
 \begin{algorithm}
-    \caption{General algorithmic approach of the Master-Slave splitting method}
-        \label{alg:mss}
+    \caption{General algorithmic approach of the manager-fellow splitting method}
+        \label{alg:MFS}
 \begin{algorithmic}[1]
-        \State Set iteration counter $\nu=0$. Initialize the voltage $V_B^0$ of the Slave.
-        \State Solve the slave system. Output: $S_B^{\nu+1}$.
-        \State Inject $S_B^{\nu+1}$ into the Master.
-        \State Solve the Master. Output: $V_B^{\nu+1}$.
+        \State Set iteration counter $\nu=0$. Initialize the voltage $V_B^0$ of the fellow.
+        \State Solve the distribution system. Output: $S_B^{\nu+1}$.
+        \State Inject $S_B^{\nu+1}$ into the manager.
+        \State Solve the manager. Output: $V_B^{\nu+1}$.
         \State Is $|V_B^{\nu+1}-V_B^{\nu}|_1 >  \epsilon $ ?  Repeat step 2 till 5.
     \end{algorithmic}
 \end{algorithm}
-As the MSS-method solves the master and slave separately, it allows for using different algorithms per domain. In this way, we choose to solve the slave with the advantageous NR-TCIM method and the master with the NR-power method.     \newline\newline
-The MSS-method can be applied to homogeneous networks and to hybrid networks. The first one requiring a transformation of the entire master domain, the latter requiring a transformation of the boundary bus only. 
-\subsubsection{{The MSS-homogeneous method}}
-The MSS-method applied to homogeneous networks requires a transformation of the single-phase transmission system. The balanced transmission system is transformed in the same was as in the F3P-method. The voltage, power, and admittance of all the buses $i=1,..,N$ are transformed to three-phase equivalents. This idea is summarized in equations \eqref{eq:f3pV} - \eqref{eq:f3pY} of section \ref{sect:f3p}. Note that there is no connecting transformer between the transmission and distribution system: The output $S_B$ of the slave can be directly injected into the master. 
+As the MFS-method solves the transmission and distribution systems separately, it allows for using different algorithms per domain. In this way, we choose to solve the distribution system with the advantageous NR-TCIM method and the transmission system with the NR-power method.     \newline\newline
+The MFS-method can be applied to homogeneous networks and to hybrid networks. The first one requiring a transformation of the entire manager domain, the latter requiring a transformation of the boundary bus only. 
+\subsubsection{{The MFS-homogeneous method}}
+The MFS-method applied to homogeneous networks requires a transformation of the single-phase transmission system. The balanced transmission system is transformed in the same was as in the F3P-method. The voltage, power, and admittance of all the buses $i=1,..,N$ are transformed to three-phase equivalents. This idea is summarized in equations \eqref{eq:f3pV} - \eqref{eq:f3pY} of section \ref{sect:f3p}.  
 
-\subsubsection{{The MSS-hybrid method}}
-The MSS-method applied to hybrid systems keeps the transmission system in single-phase. Only a transformation of the boundary bus is then required. \newline
-As we first solve the slave, we receive the complex power $S_B$ as three-phase output, which we have to transform to a single-phase quantity. Once we have solved the master, we have to transform the single-phase output of the voltage $V_B$ of the master. Here again, we assume that the boundary bus $B$ is balanced. Balanced three-phase power in pu is related to single-phase power in \eqref{eq:SA+}:
+\subsubsection{{The MFS-hybrid method}}
+The MFS-method applied to hybrid systems keeps the transmission system in single-phase. Only a transformation of the boundary bus is then required. \newline
+As we first solve the distribution system, we receive the complex power $S_B$ as three-phase output, which we have to transform to a single-phase quantity. Once we have solved the transmission system, we have to transform the single-phase output of the voltage $V_B$ of this system. Here again, we assume that the boundary bus $B$ is balanced. Balanced three-phase power in pu is related to single-phase power in \eqref{eq:SA+} according the following relation:
 \begin{align}
-    [S_a] = \mathbf{T_4}\begin{bmatrix}S_a & S_b & S_c \end{bmatrix}^T.
-\label{eq:MSShS}\end{align}
-We transform the complex power of the boundary bus $[S_{abc}]_B$ to $[S_a]_B$ using equation \eqref{eq:MSShS}. \newline 
+    [S_a] = \mathbf{T_4}\begin{bmatrix}S_a & S_b & S_c \end{bmatrix}^T, \quad \mathbf{T_4}= \frac{1}{3}\left[1 \ 1 \ 1 \right],\quad\mbox{and}\quad a = e^{\frac{2}{3}\pi\iota}.
+\label{eq:MFShS}\end{align}
 The voltage of the boundary bus has the same relation as in \eqref{eq:VA+}: 
 \begin{align}
     \begin{bmatrix}V_a & V_b & V_c\end{bmatrix}^T_B &= \mathbf{T_1}\begin{bmatrix}V_a\end{bmatrix}_B,\quad 
-     \mathbf{T_1} = [1\ a^2\ a]^T\quad\mbox{and}\quad a = e^{\frac{2}{3}\pi\iota}.\label{eq:MSShV}
+     \mathbf{T_1} = [1\ a^2\ a]^T,\quad\mbox{and}\quad a = e^{\frac{2}{3}\pi\iota}.\label{eq:MFShV}
     \end{align}
-The MSS-methods do not require a transformation of the nodal admittance matrix. We transform the necessary boundary parameters directly. At every MSS-iteration, we make transformation \eqref{eq:MSShS} and \eqref{eq:MSShV} after step 2 and step 4 of algorithm \ref{alg:mss}, respectively. 
+  %  \note{T-1 moet waarschijnlijk a hebben van -23 pi}
+The MFS-methods do not require a transformation of the nodal admittance matrix. We transform the necessary boundary parameters directly. At every MFS-iteration, we make transformation \eqref{eq:MFShS} and \eqref{eq:MFShV} after step 2 and step 4 of algorithm \ref{alg:MFS}, respectively. 
 
-\subsubsection{The Master-Slave iterative schemes}
-Two iterative schemes of the Master-Slave splitting are defined \cite{Sun2011}. The first is the Convergence Alternating Iterative (CAI) scheme and the other is the Multistep Alternating Iterative (MAI) scheme. In the CAI-scheme, we define an explicit convergence condition for the slave and for the master. The slave is solved with NR-TCIM, for which we define a tolerance value $\epsilon_D$\todo{Give $\epsilon$}. Once this system has converged, we inject its boundary output into the master. We solve the master using NR-power, for which we also define a (not necessarily) different tolerance value $\epsilon_T$. Once the master has converged, we inject its boundary output into the slave. The integrated network is converged once we have met the convergence condition of the MSS-algorithm. \\
-In the MAI-scheme, we define a maximum number of iterations per separate system, ie: $I_{max,D}$ and $I_{max,T}$. We inject the output of one system into the other as soon this maximum number of iterations has been reached. The convergence of the integrated network is still based on the convergence condition of the MSS-algorithm. 
+\subsubsection{The manager-fellow iterative schemes}
+Two iterative schemes of the manager-fellow splitting are defined \cite{Sun2005}. The first is the Convergence Alternating Iterative (CAI) scheme and the other is the Multistep Alternating Iterative (MAI) scheme. In the CAI-scheme, we define an explicit convergence condition for the fellow and for the manager. The fellow is solved with NR-TCIM, for which we define a tolerance value $\epsilon_D$. Once this system has converged, we inject its boundary output into the manager. We solve the manager using NR-power, for which we also define a (not necessarily) different tolerance value $\epsilon_T$. Once the manager has converged, we inject its boundary output into the fellow. The integrated network is converged once we have met the convergence condition of the MFS-algorithm. \\
+In the MAI-scheme, we first define a maximum number of iterations per separate system, ie: $I_{max,D}$ and $I_{max,T}$. We inject the output of one system into the other as soon this maximum number of iterations has been reached. The convergence of the integrated network is based on the convergence condition of the MFS-algorithm. 
 \paragraph{Speeding up the CAI-scheme} \label{par:caischeme}
-At every MSS iteration, we solve the separated domains on its own. To solve this separated system, we need to initialize the voltages in order to have an initial guess to start Newton-Raphson. In the current suggested schemes, we initialize all the buses, except the boundary bus $B$, to $V=1.0$ pu.\todo{Clarify the coming phrase} We can reduce the number of required iterations for the separate systems if we initialize the voltages to its last obtained solution in the previous MSS-iteration, ie $V^{\nu+1}_0=V^{\nu}_{I,D}$. This will probably be beneficial for the CAI-scheme, where a separated domain requires a couple of iterations before it is converged.  
+We can speed-up the CAI-scheme if we, at every MFS iteration, initialize the voltages as the output of the previous MFS iteration. In the current suggested schemes, we initialize all the buses, except the boundary bus $B$, to $V=1.0$ pu. We can reduce the number of required iterations for the separate systems if we initialize the voltages to its last obtained solution in the previous MFS-iteration, ie: $V^{\nu+1}_{0,D}=V^{\nu}_{I,D}$ and $V^{\nu+1}_{0,T}=V^{\nu}_{I,T}$. 
 
-
-
-
-
+\subsection{General expectations of the methods} \label{sect:advantages}
+Based on the theoretical study of the unified and splitting methods and hybrid and homogeneous networks, we have some first expectations about their performances. Firstly, we expect the methods applied on hybrid networks to perform better in terms of CPU-time. Homogeneous network contain a three-phase representation of the transmission network and thus needs to process a larger Jacobian matrix: If we consider a transmission system with $N$ buses, then the Jacobian matrix of a three-phase network will be of size $6N$ x $6N$ compared to a single-phase Jacobian matrix of size $2N$ x $2N$. Secondly, it is possible that we observe a higher number of iterations for the methods applied on hybrid networks. This expectation is based on the assumption that the connection bus at transmission side is completely balanced while it might be unbalanced due to the connection to the unbalanced distribution system. \\
+If we compare the unified and splitting methods, we expect to see an advantage in speed for the unified methods as they only need to solve one system. The splitting methods are advantageous when system operators are not allowed to share complete network information: In the splitting methods, they only need to share information of the connecting boundary bus. 
 
 \newpage 
 \section{Numerical assessment}
-All previous mentioned methods are implemented into the Matpower\footnote{MATPOWER is a package of free, open-source Matlab-language M-files for solving steady-state power system simulation and optimization problems \cite{Zimmerman2011}} library. Matpower contains several transmission network test cases. The resources page of IEEE Power \& Energy Society contains several distribution network test cases which are all explained in \cite{Schneider2018}. These test cases contain the necessary input to solve power flow problems on separated networks. We created integrated test cases from the existing transmission and distribution test cases. We used the 9-bus, 118-bus, and 3120-bus data as transmission network test cases and the IEEE 13-bus and 3IEEE 7-bus data as distribution test cases. The distribution test cases represent the unbalanced characteristics of the network. We modified the 13-bus distribution network to a 10-bus network by deleting the buses connected to the regulator. We changed the loading of the 37-bus network by shifting 20\% of the loads of phase b equally to phase a and c, like the original authors \cite{Taranto2008}.
-We connected a transmission and a distribution network to each other to create the following integrated test cases: 
+All previous mentioned methods are implemented into the Matpower\footnote{MATPOWER is a package of free, open-source Matlab-language M-files for solving steady-state power system simulation and optimization problems \cite{Zimmerman2011}} library. Matpower contains several transmission network test cases. The resources page of IEEE Power \& Energy Society contains several distribution network test cases which are all explained in \cite{Schneider2018}. These test cases contain the necessary input to solve power flow problems on separated networks. We created integrated test cases from the existing transmission and distribution test cases. We used the 9-bus, 33-bus, 118-bus, and 3120-bus data as balanced network test cases. All these test-cases except for the 33-bus network are transmission networks. The 33-bus is a balanced distribution network. We use the IEEE 13-bus, 37-bus, 123-bus, and 8500-bus data as unbalanced distribution test cases. We changed the loading of the 37-bus network by shifting 20\% of the original load of phase b equally to phase a and c, like the original authors \cite{Taranto2008} to create an unbalanced network.\\ 
+The loads of the IEEE test-networks are connected according the given configuration. The loads in the Matpower test-networks are configured as Wye-P loads in the full three-phase method and the MFS-homogeneous method. The transformers in this method are modeled in a Wye-Wye configuration.
+\\ 
+We solve the unified methods using NR-TCIM with $\varepsilon=10^{-8}$ as convergence condition. In the splitting methods, we solve the distribution system using NR-TCIM and $\varepsilon_D=10^{-8}$, the transmission system using NR-P and $\varepsilon_T=10^{-8}$, and we define the tolerance value of the MFS-method also as $\varepsilon_{MFS}=10^{-8}$.
+\\ \\ 
+We created the following integrated test cases by integrating one balanced network to one or multiple unbalanced networks: 
+\begin{multicols}{2}
 \begin{itemize}
     \item Test case 1: T9-D13
-    \item Test case 2: T9-D37
-    \item Test case 3: T118-D37
-    \item Test case 4: T3120-D37
-    \item Test case 5: T9-2D13 (2 13-bus distribution networks) 
-    \item Test case 6: T9-3D13 (3 13-bus distribution networks) 
+    \item Test case 2: D33-D37
+    \item Test case 3: T118-D123
+    \item Test case 4: T3120-D8500 
+    \item Test case 5: T9-3D13 
+    \item Test case 6: T118-3D123 
 \end{itemize}
+\end{multicols}
 \paragraph{Connection bus}
-We selected a random load bus in the transmission network to become the connection bus in the integrated network. We choose bus $7$ in the 9-bus network, we choose bus $118$ in the 118-bus network, and we choose bus $3003$ in the 3120-bus network. This could have been any load bus. The original reference bus of the distribution network becomes the connection bus at the distribution side of the integrated network. \\
-The unified method connects the two connection buses via an extra transformer. This transformer has the same line admittance as the first distribution cable. The distribution connection bus is the former reference bus and must be changed to a load bus. This new load bus should get the same load as the original load from the transmission connection bus \cite{Taranto2008}. The splitting methods do not put a transformer between the networks. They only change the original transmission load bus to a bus having zero load. The distribution reference bus remains a reference bus. The reference voltage magnitude and angle will not be $V=1.0$ pu, but the output it receives from the transmission bus.  \newline \newline
-Test case 5 and 6 have multiple distribution networks connected. These networks are connected to the last 2 and 3 load buses of the transmission networks, where each of the original load bus is changed to a zero load bus. 
+We selected a random load bus in the transmission network as the connection bus in the integrated network. We choose bus $7$ in the 9-bus network, bus $30$ in the 33-bus network, bus $108$ in the 118-bus network, and we choose bus $2700$ in the 3120-bus network. The original reference bus of the distribution network becomes the connection bus at the distribution side of the integrated network. In the unified methods, this former reference bus must be changed to a load bus.  In the splitting method, the distribution reference bus remains a reference bus, initialized by the output it receives from the transmission network. 
+Test case 5 and 6 have multiple distribution networks connected. These networks are connected to the mentioned connection bus and its sequential buses. 
+
+
 \subsection{Results}
-We are going to compare all the integration methods on accuracy, speed, and convergence to give an insight into which method is favorable to solve integrated networks. 
-\subsubsection{Accuracy} 
-To check the accuracy of the methods, we compare the voltage output of the integrated methods with the output of the separated methods. We solve the transmission network separately using NR-power and we solve the distribution network separately using NR-TCIM. The distribution domain in the integrated network has no reference bus anymore. In order to compare the voltage profile of this part, we scale the values accordingly. 
-We know that the voltage is given by: \begin{equation}
-V_p=|V|_p\exp{(\iota\delta_{V_p}-\phi)},\quad p\in\{a,b,c\},
-\end{equation}
-where $|V|$ and $\delta$ are set to $|V|=1.0$ pu and $\delta=0$ at the reference bus. We can compare the voltage of the distribution domain to the voltage of the separated domain after scaling. We divide the voltage magnitude of the distribution domain, buses $i=1,...,N_D$, by the voltage magnitude of the distribution connection bus: 
-\begin{equation}
-|V|_{i,{D_{new}}} = \frac{|V|_{i,{D_{uns}}}}{|V|_{ref,{D_{uns}}}},\quad i=1,..,N_D.
-\label{eq:ViDnew}
-\end{equation}
-The subscript $uns$ represents the unscaled values and $new$ represents the scaled values. \newline 
-The voltage angle represents the phase-shift in relation to the phase of the reference bus. In order to compare the integrated output of the voltage angle with the separated output, we subtract the phase-angle of the former reference bus from all the buses $i=1,..,N_D$: 
-\begin{equation}
-\delta_{i,{D_{new}}} ={\delta_{i,{D_{uns}}}}-{\delta_{ref,{D_{uns}}}},\quad i=1,..,D_N.
-\label{eq:dViDnew}
-\end{equation}
-Note that we need to apply \eqref{eq:ViDnew} and \eqref{eq:dViDnew} to all the three phases separately. \newline\newline
-We compare the voltage magnitudes and angles of the integrated network, including the scaled distribution domain, with the magnitudes angles of the separate domains. We take the infinity norm of the relative difference between the voltages: 
-\begin{equation}
-\mbox{rel. error of } |V|_p = \left|\frac{|V|^*_p - |V|^o_p}{|V|^o_p}\right|_\infty,\quad p\in\{a,b,c\},
-\label{eq:norm|V|}
-\end{equation}
-where the asterisk $*$ marks the outcome of separated networks, and the superscript $o$ the output of separated networks (o=original). We do this in a similar manner for the voltage angle: 
-\begin{equation}
-\mbox{rel. error of } \delta_p = \left|\frac{\delta^*_p - \delta^o_p}{\delta^o_p}\right|_\infty,\quad p\in\{a,b,c\},
-\label{eq:normdelta}
-\end{equation}
-We have given the relative errors of the voltage magnitude and angle of the three phases for all the test cases in table \ref{tab:relerror}. 
+In order to solve realistic power flow problems, which are very large electricity networks, we need insight into the speed of the problems. In this section we compare the integration methods on CPU-time and number of iterations. We share the results in table \ref{tab:speed}. 
+\begin{table}[h!]
+\renewcommand{\arraystretch}{1.3}
+\centering
+\caption{Comparison on number of iterations (in case of the MFS-method ($I_{MFS}$) and the necessary iterations per subdomain ($I_T$ and $I_D$)), and CPU-time of the integration methods, applied on six test-cases. The top one are methods applied on homogeneous networks. The bottom one is applied on hybrid networks. }\label{tab:speed}
+\begin{adjustbox}{width=\textwidth} %, angle=90}
+\small
+\begin{tabular}{@{}l c cc c  cccc c cccc c  @{}}\toprule
+                               && \multicolumn{2}{c}{\textit{F3P}} &&     \multicolumn{4}{c}{\textit{MFS-homo-CAI}} && \multicolumn{4}{c}{\textit{MFS-homo-MAI}} \\ \midrule 
+\multicolumn{1}{l}{}        && \textit{its}      & \textit{CPU} && $I_{MFS}$      & $I_T$   &  $I_D$      & \textit{CPU}     &&$I_{MFS}$      & $I_T$   &  $I_D$      & \textit{CPU}      \\
+\cmidrule{3-4}  \cmidrule{6-9}  \cmidrule{11-14}   
+\multicolumn{1}{c}{test case}      && \textit{\#}       & \textit{sec} && \textit{\#}      & \textit{\#}    & \textit{\#}       & \textit{sec}     && \textit{\#}        & \textit{\#}     &  \textit{\#}       & \textit{sec}  \\
+\midrule
+\multicolumn{1}{c}{\textit{T9-D13 (7)}}           && 4  & {0.018}    && 4  & 4 & 5 &  \textbf{1.37} && 4  & 4 & 5 & {1.44}\\
+\multicolumn{1}{c}{\textit{D33-D37 (30)}}         && 4  & {0.018}    && 18 & 3 & 5 &  \textbf{6.15} && 18  & 3 & 4  & {6.32}\\
+\multicolumn{1}{c}{{\textit{T118-D123 (108)}}}    && 6  & {0.041}    && 3  & 4 & 5 &  \textbf{1.25} && -  &  &  &    \\
+\multicolumn{1}{c}{{\textit{T3120-D8500 (2700)}}} && 5  & {0.521}    && 3  & 6 & 5 &  \textbf{3.71} && -  &  &  &  \\
+\multicolumn{1}{c}{{\textit{T9-3D13 (7-9)}}}      && 4  & {0.023}    && 4  & 4 & 5 &  \textbf{2.38} && -  &  &  &      \\
+ \multicolumn{1}{l}{\textit{T118-3D123} (108-110)}          && 13 & {0.127}    && 3  & 4 & 4 &  \textbf{2.43} && -  &  & \textbf{-} \\
+% \multicolumn{1}{l}{{\textit{T9-3D13}}}    && - & - && - & -    && -       & - & -  & \textbf{-} && -   & - & - &  - && -       & -  & - & - && -       & -  & - & - \\
+\toprule 
+\end{tabular}
+\end{adjustbox}
+%homogeneous
+\begin{adjustbox}{width=1\textwidth} %, angle=90}
+\small
+\begin{tabular}{@{}l c cc c  cccc c cccc c  @{}}\toprule
+                               && \multicolumn{2}{c}{\textit{IC}} &&     \multicolumn{4}{c}{\textit{MFS-hybrid-CAI}} && \multicolumn{4}{c}{\textit{MFS-hybrid-MAI}} \\ \midrule 
+\multicolumn{1}{l}{}        && \textit{its}      & \textit{CPU} && $I_{MFS}$      & $I_T$   &  $I_D$      & \textit{CPU}     &&$I_{MFS}$      & $I_T$   &  $I_D$      & \textit{CPU}      \\
+\cmidrule{3-4}  \cmidrule{6-9}  \cmidrule{11-14}   
+\multicolumn{1}{c}{test case}      && \textit{\#}       & \textit{sec} && \textit{\#}      & \textit{\#}    & \textit{\#}       & \textit{sec}     && \textit{\#}        & \textit{\#}     &  \textit{\#}       & \textit{sec}  \\
+\midrule
+\multicolumn{1}{c}{\textit{T9-D13 (7)}}           && 4  & {0.013}    && 4  & 4 & 5 &  1.02 && 4  & 4 & 5 & {1.02}\\
+\multicolumn{1}{c}{\textit{D33-D37 (30)}}         && 4  & {0.021}    && 18 & 3 & 5 &  4.41 && 18  & 3 &  4 & {4.36}\\
+\multicolumn{1}{c}{{\textit{T118-D123 (108)}}}    && 8  & {0.039}    && 3  & 7 & 6 &  1.01 && -  &  &  &    \\
+\multicolumn{1}{c}{{\textit{T3120-D8500 (2700)}}} && 5  & {0.288}    && 3  & 6 & 5 &  2.44 && -  &  &  &  \\
+\multicolumn{1}{c}{{\textit{T9-3D13 (7-9)}}}      && 5  & {0.019}    && 4  & 4 & 5 &  2.02 && -  &  &  &      \\
+ \multicolumn{1}{l}{\textit{T118-3D123 (108-110)}}          && 10 & 0.126    && 3  & 7 & 8 &  2.18 && -  &  & \textbf{-} \\
+% \multicolumn{1}{l}{{\textit{T9-3D13}}}    && - & - && - & -    && -       & - & -  & \textbf{-} && -   & - & - &  - && -       & -  & - & - && -       & -  & - & - \\
+\toprule 
+\end{tabular}
+\end{adjustbox}
+\end{table}
 
-\input{allnorms}
-\paragraph{The MAI-scheme}
-Table \ref{tab:relerror} shows that all the integration methods produce accurate results, except for the MSS-homo-MAI and MSS-hybrid-MAI methods. This is caused by the number of iterations per subdomain that has been set too low. To produce more accurate results, we increased the number of iterations per subdomain simultaneously. We started with $I_{T,max}=I_{D,max}=2$ until $I_{T,max}=I_{D,max}=6$.  Table \ref{tab:MAIschemes} shows the results. Next to the relative error, this table shows the required number of MSS iterations and how long it takes to reach convergence. We only applied these tests on test case T118-D37, as these results were least accurate. When using $4$ iterations per subdomain, the results become as accurate as the MSS-CAI methods. 
-\input{L-MAIN2}
-We plotted the voltage magnitude and angles of the MAI-schemes to show how the solution, with every increase of the maximum number of subiterations, approaches its `true' results. For comparison we plotted the separated transmission and distribution network as `true' solution in figures \ref{fig:MAIN2} - \ref{fig:ZMAIN1}. 
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=\textwidth]{Images/MAI_N2.eps}
-\caption{Voltage profile (left: magnitude, right: angle) of the MAI-schemes with increasing number of subiterations, applied on homogeneous networks}\label{fig:MAIN2}
+%\include{tablespeed}
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{Images/unifiednorms.eps}
+    \caption{Plots of $|F|_\infty$ of the unified methods for four different test-cases. The black dotted line is the tolerance value, ie $\epsilon=1e-8$.}
+    \label{fig:uninorm}
 \end{figure}
-\begin{figure}[h]
-\centering
-\includegraphics[width=\textwidth]{Images/Z_MAI_N2.eps}
-\caption{A magnified version of figure \ref{fig:MAIN2} of the buses surrounding the connection bus.}\label{fig:ZMAIN2}
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{Images/MSSCAInorms.eps}
+    \caption{Plots of $|V_B^{\nu+1}-V_B^{\nu}|_\infty$ of the splitting methods for four different test-cases. The black dotted line is the tolerance value, ie $\epsilon=1e-8$.}
+    \label{fig:MFSnorm}
 \end{figure}
-\begin{figure}[h]
-\centering
-\includegraphics[width=\textwidth]{Images/MAI_N1.eps}
-\caption{Voltage profile (left: magnitude, right: angle) of the MAI-schemes with increasing number of subiterations, applied on hybrid networks}\label{fig:MAIN1}
-\end{figure}
-\begin{figure}[h]
-\centering
-\includegraphics[width=\textwidth]{Images/Z_MAI_N1.eps}
-\caption{A magnified version of figure \ref{fig:MAIN1} of the buses surrounding the connection bus.}\label{fig:ZMAIN1}
-\end{figure}
-%\newpage 
-
-\subsubsection{Convergence and speed} 
-The previous subsection shows that all the methods produce accurate results. In order to solve realistic power flow problems, which are very large electricity networks, we need insight into the speed of the problems. In this section we compare the integration methods on CPU-time and number of iterations. We share the results in table \ref{tab:speed}. 
-\include{tablespeed}
-\noindent These results show that over all the test cases, the full three-phase method performs the least. The rest of the methods are comparable in speed for the small test-cases. The big test case, test-case 5, gives the most significant results. The hybrid network methods are a lot faster than the homogeneous methods. \newline \newline
-There is not a clear significance in the MSS-CAI- and MAI-schemes. We would recommend to choose the CAI method as this method is only a bit slower than the MAI method, but you will always get accurate results. With the MAI-scheme, you first have to find out how many subiterations are required before convergence.  
+\noindent These results show that over all the test cases, the MFS-homo method performs the least\todo{I stopped using the MAI-scheme, because it is either not converging or producing the exact same results as the CAI-scheme. Either I include this as a note or we completely disregard the MAI-scheme in the report }. The unified methods are are comparable in speed for the small test-cases. The big test case, T3120-D8500, gives the most significant results. The hybrid network methods are a lot faster than the homogeneous methods. \newline \newline
+There is not a clear significance in the results of the MFS-CAI- and MAI-schemes. We recommend to use the CAI-schemes as with the MAI-schemes you first have to determine the number subiterations that is are required to reach convergence. Then, you will get very similar results as in the CAI-scheme but with an extra preprocessing step.  
 
 \section{Conclusion}
-We have reviewed and assessed two types of integration methods to solve the power flow problem. We classified them as unified and splitting methods and applied them on hybrid and homogeneous networks. We investigated if the methods produced accurate results and analyzed the speed and number of iterations to reach convergence. \newline
-From this assessment we can conclude that the methods applied on hybrid networks are most favorable in sense of CPU-time. This can be easily argued as the size of the Jacobian in the transmission subdomain increases from having size 2n by 2n to having a size of 6n by 6n, $n$ is the number of transmission buses. The differences between the splitting and unified methods applied on hybrid networks are less significant. We would recommend to choose the unified methods when this is possible. But in geographically distinct locations, or when legislation prohibits system operators to share complete network data, the splitting methods are a good alternative. The speed of the CAI-schemes can be reduced if we apply the idea of paragraph \ref{par:caischeme}. \newline\newline
-The next step is to continue with realistic test cases which can be up to millions of buses per subdomain. In most countries, the real transmission network is much smaller than the distribution network and a country has in general more than one distribution network. The differences between homogeneous and hybrid methods then become less significant. Furthermore, these very large networks must be solved in parallel which require other techniques. The MSS-method has an advantage here, as it is a domain-decomposition approach: multiple distribution networks can run on parallel cores. Doing new simulations using these speed-up techniques on realistically sized networks, should give a better idea which method is most favorable to solve the integrated power flow problem. 
+We have reviewed and assessed two types of integration methods to solve the power flow problem. We classified them as unified and splitting methods and applied them on hybrid and homogeneous networks. The splitting methods could be further divided in two different iterating schemes. This resulted in six different methods as starting point of our numerical comparison study. We investigated if the methods produced accurate results and analyzed the speed and number of iterations to reach convergence. \newline
+From this assessment we can conclude that the unified methods are most favorable in sense of CPU-time compared to splitting methods, in line with the expectations we stated in section \ref{sect:advantages}. The differences within the unified methods are less significant than we expected. We argued that the increase in size of the Jacobian would have resulted in increase of CPU-time. Only in the bigger test-case T3120-D8500 that the difference becomes significant: The F3P-method is around twice as slow as the Interconnected method. \newline 
+Based on these results we would recommend to choose the unified methods applied on hybrid networks when this is possible. But in geographically distinct locations, or when legislation prohibits system operators to share complete network data, the splitting methods are a good alternative. The speed of the CAI-schemes can be reduced if we apply the idea of paragraph \ref{par:caischeme}. \newline\newline
+The next step is to continue with realistic test cases which can be up to millions of buses per network domain. In most countries, the real transmission network is much smaller than the distribution network and a country has in general more than one distribution network. The differences between homogeneous and hybrid methods then become less significant.  To solve these very large systems in reasonable amount of time, we have to adapt the methods, using Newton-Krylov methods and preconditioning techniques  \cite{Idema2013}, for a parallel or GPU environment. Then, the MFS-hybrid-CAI method gets the advantage when multiple distribution networks are connected to one transmission network as it is a domain-decomposition approach: multiple distribution networks can run on parallel cores. Doing new simulations using these speed-up techniques on realistically sized networks, should give a better idea which method is most favorable to solve the integrated power flow problem. 
 
 %\section{References}
 \newpage
 \bibliographystyle{ieeetr}
 \bibliography{pscc3} 
-
+%\input{extra}
 
 \end{document}
